@@ -272,16 +272,18 @@ inline void doPlotTile(int x, int y, TilemapCoord coord) {
 	float tw = sTilemapAsset->tw;
 	float th = sTilemapAsset->th;
 
+	float ep = 0.01f;
 	plot(p, uv);
-	plot(p+vec(0,th), uv+vec(0,th));
-	plot(p+vec(tw,0), uv+vec(tw,0));
-	plot(p+vec(tw,th), uv+vec(tw,th));
+	plot(p+vec(0,th+ep), uv+vec(0,th));
+	plot(p+vec(tw+ep,0), uv+vec(tw,0));
+	plot(p+vec(tw+ep,th+ep), uv+vec(tw,th));
 }
 
 
 void SpriteBatch::drawTilemap(vec2 viewOffset) {
-	viewOffset.x = floorf(64 * viewOffset.x) / 64.0f;
-	viewOffset.y = floorf(64 * viewOffset.y) / 64.0f;
+	double k = 4 * Graphics::pixelScale();
+	viewOffset.x = float(floor(k * viewOffset.x) / k);
+	viewOffset.y = float(floor(k * viewOffset.y) / k);
 
 	ASSERT(sTilemapAsset);
 	//glDisable(GL_BLEND);

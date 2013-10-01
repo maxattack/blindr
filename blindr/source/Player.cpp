@@ -15,9 +15,8 @@ pressingRight(false) {
 	bodyParams.userData = this;
 	body = world->getSim()->CreateBody(&bodyParams);
 	
-	
 	b2PolygonShape hitboxShape;
-	hitboxShape.SetAsBox(PlayerHalfWidth, PlayerHalfHeight);
+	hitboxShape.SetAsBox(PlayerHalfWidth, 0.5f * PlayerHalfHeight, b2Vec2(0, 0.5f * PlayerHalfHeight), 0);
 	
 	b2FixtureDef hitboxParams;
 	hitboxParams.shape = &hitboxShape;
@@ -25,8 +24,12 @@ pressingRight(false) {
 	hitboxParams.friction = 0.01f;
 	hitboxParams.filter.categoryBits = ctPlayer;
 	hitboxParams.density = 1.0f;
+	body->CreateFixture(&hitboxParams);
 	
-	hitbox = body->CreateFixture(&hitboxParams);
+	b2CircleShape humpShape;
+	humpShape.m_radius = PlayerHalfWidth;
+	hitboxParams.shape = &humpShape;
+	body->CreateFixture(&hitboxParams);
 	
 	b2PolygonShape footShape;
 	footShape.SetAsBox(0.99f * PlayerHalfWidth, 0.05f, b2Vec2(0, PlayerHalfHeight), 0);
@@ -39,6 +42,10 @@ pressingRight(false) {
 	
 	foot = body->CreateFixture(&footParams);
 	
+}
+
+bool Blindr::Player::isHitbox(b2Fixture *fix) {
+	return !fix->IsSensor() && fix->GetBody()->GetUserData() == this;
 }
 
 bool Blindr::Player::grounded() {

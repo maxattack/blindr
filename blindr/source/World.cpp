@@ -2,34 +2,59 @@
 #include <string>
 #include <sstream>
 
+// helperzzz
+
+inline b2Vec2 tileToPosition(int tx, int ty) {
+	return b2Vec2(tx - TilemapOffsetX * MetersPerPixel, ty);
+}
+
+
 Blindr::World::World() : sim(b2Vec2(0,40)), player(0), gazer(0), doDebugDraw(true) {
 	
 	sim.SetContactListener(this);
 	
-	dbgDraw.SetFlags( DebugDraw::e_shapeBit | DebugDraw::e_centerOfMassBit | DebugDraw::e_pairBit );
+	dbgDraw.SetFlags( DebugDraw::e_shapeBit | DebugDraw::e_pairBit );
 	sim.SetDebugDraw(&dbgDraw);
+
+	{
+		b2BodyDef groundParams;
+		groundParams.type = b2_staticBody;
+		ground = sim.CreateBody(&groundParams);
+	}
 
 	b2Vec2 initialPlayerPos;
 	initializeGeometry(&initialPlayerPos);
+	createWalls();
 	
 	player = new Player(this, initialPlayerPos);
 	gazer = new Gazer(this);
+
+	
+	timeToNextSpawn = expovariate(TimeBetweenSpawns);
 }
 
-b2Body *Blindr::World::createFloor(b2Vec2 p0, b2Vec2 p1) {
-	b2BodyDef floorParams;
-	floorParams.position = p0;
-	b2Body *floor = sim.CreateBody(&floorParams);
+void Blindr::World::createWalls() {
+	b2EdgeShape wall;
+	wall.Set(tileToPosition(2,0), tileToPosition(2, kLevelH));
 	
+	b2FixtureDef fixParams;
+	fixParams.shape = &wall;
+	fixParams.filter.categoryBits = ctWall;
+	ground->CreateFixture(&fixParams);
+	
+	wall.Set(tileToPosition(kLevelW-2, 0) ,tileToPosition(kLevelW-2, kLevelH));
+	ground->CreateFixture(&fixParams);
+}
+
+void Blindr::World::createFloor(b2Vec2 p0, b2Vec2 p1) {
 	b2EdgeShape edgeShape;
-	edgeShape.Set(b2Vec2(0,0), p1 - p0);
+	edgeShape.Set(p0, p1);
 	
 	b2FixtureDef edgeParams;
 	edgeParams.shape = &edgeShape;
 	edgeParams.filter.categoryBits = ctFloor;
 	
-	floor->CreateFixture(&edgeParams);
-	return floor;
+	ground->CreateFixture(&edgeParams);
 }
 
 void Blindr::World::handleEvents() {
@@ -100,11 +125,23 @@ void Blindr::World::run() {
 		
 		scrollMeters -= ScrollMetersPerSecond * Time::deltaSeconds();
 		
+		
+		
+		// update scene
+		timeToNextSpawn -= Time::deltaSeconds();
+		if (timeToNextSpawn < 0.0f) {
+			timeToNextSpawn += expovariate(TimeBetweenSpawns);
+			if (!debris.isFull()) {
+				debris.alloc().init();
+			}
+		}
 		player->preTick();
 		gazer->preTick();
 		sim.Step(Time::deltaSeconds(), 8, 8);
 		player->postTick();
 		gazer->postTick();
+		
+		// draw scene
 		
 		SpriteBatch::begin(assets->Background);
 		SpriteBatch::draw(assets->background, vec(0,0));
@@ -152,12 +189,14 @@ void Blindr::World::EndContact(b2Contact *contact) {
 
 }
 
+
+
 void Blindr::World::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
 	
 	// file collisions between "Player" and "Floor" if the player is travelling up
-	if (contact->GetFixtureA() == player->getHitbox()) {
+	if (player->isHitbox(contact->GetFixtureA())) {
 		checkForCloudPlatform(contact->GetFixtureB(), contact);
-	} else if (contact->GetFixtureB() == player->getHitbox()) {
+	} else if (player->isHitbox(contact->GetFixtureB())) {
 		checkForCloudPlatform(contact->GetFixtureA(), contact);
 	}
 }
@@ -168,15 +207,14 @@ void Blindr::World::PostSolve(b2Contact *contact, const b2ContactImpulse *impuls
 
 void Blindr::World::checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact) {
 	float py = player->getBody()->GetPosition().y + PlayerHalfHeight;
-	float fy = fixture->GetBody()->GetPosition().y;
-	if (py > fy && (fixture->GetFilterData().categoryBits && ctFloor) != 0) {
+	//float fy = fixture->GetBody()->GetPosition().y;
+	b2WorldManifold worldMan;
+	contact->GetWorldManifold(&worldMan);
+	float fy = worldMan.points[0].y;
+	if (py > fy && (fixture->GetFilterData().categoryBits & ctFloor) != 0) {
 		contact->SetEnabled(false);
 	}
 	
-}
-
-inline b2Vec2 tileToPosition(int tx, int ty) {
-	return b2Vec2(tx - TilemapOffsetX * MetersPerPixel, ty);
 }
 
 void Blindr::World::initializeGeometry(b2Vec2 *outPlayerPosition) {

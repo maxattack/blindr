@@ -81,7 +81,11 @@ public:
         mRecords[slot.index].id = slot.id;
 		return slot.id;
     }
-
+	
+	T& alloc() {
+		return (*this)[takeOut()];
+	}
+	
     void putBack(ID id) {
         // assuming IDs are valid in production
         ASSERT(isActive(id));
@@ -102,6 +106,14 @@ public:
 			mFreelistEnqueue = id & 0xffff;
 		}
     }
+	
+	void dealloc(T& t) {
+		putBack(t.id);
+	}
+	
+	void dealloc(T* t) {
+		putBack(t->id);
+	}
     
 	int count() const { return mCount; }
 

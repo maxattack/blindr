@@ -7,14 +7,15 @@
 #define PixelsPerMeter   24
 #define MetersPerPixel   (1.0f/PixelsPerMeter)
 #define PlayerRunForce   10.0f
-#define PlayerJumpForce  13.5f
+#define PlayerJumpForce  15.0f
 #define PlayerWalkFPS    10
 #define PlayerIdleFPS    12
 #define PlayerHalfWidth  0.45f
 #define PlayerHalfHeight 0.5f
-#define TilemapOffsetX   8
+#define TilemapOffsetX   3
 #define ScrollMetersPerSecond 0.25f
 #define GazerOffset      0.5f
+#define TimeBetweenSpawns 2.5f
 
 inline vec2 vec(b2Vec2 bv) { return vec(bv.x, bv.y); }
 inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
@@ -31,10 +32,11 @@ namespace Blindr {
 
 	enum CollisionTypes {
 		ctFloor =      0x1,
-		ctPlayer =     0x1<<1,
-		ctPlayerFoot = 0x1<<2,
-		ctDebris =     0x1<<3,
-		ctGazer =      0x1<<4
+		ctWall =       0x1<<1,
+		ctPlayer =     0x1<<2,
+		ctPlayerFoot = 0x1<<3,
+		ctDebris =     0x1<<4,
+		ctGazer =      0x1<<5
 	};
 	
 	enum BodyUserDataType {
@@ -49,6 +51,11 @@ namespace Blindr {
 		
 		bool isPlayer() const { return userType == btPlayer; }
 		bool isDebris() const { return userType == btDebris; }
+	};
+	
+	
+	struct Pooled {
+		ID id;
 	};
 	
 	struct FloorData {
@@ -72,7 +79,7 @@ namespace Blindr {
 
 	class Player : public BodyUserdata {
 		b2Body *body;
-		b2Fixture *hitbox;
+		//b2Fixture *hitbox;
 		b2Fixture *foot;
 		int groundCount;
 		bool facingRight;
@@ -90,7 +97,7 @@ namespace Blindr {
 		
 		b2Body* getBody() { return body; }
 		b2Fixture* getFoot() { return foot; }
-		b2Fixture* getHitbox() { return hitbox; }
+		//b2Fixture* getHitbox() { return hitbox; }
 		
 		void incrementGroundCount() { ++groundCount; }
 		void decrementGroundCount() { if (groundCount) { --groundCount; } }
@@ -101,10 +108,12 @@ namespace Blindr {
 		void preTick();
 		void postTick();
 		void draw();
+		
+		bool isHitbox(b2Fixture *fix);
 
 	};
 	
-	class Debris : public BodyUserdata {
+	class Debris : public BodyUserdata, public Pooled {
 		b2Body *body;
 		
 	public:
@@ -132,11 +141,13 @@ namespace Blindr {
 		b2World sim;
 		Player *player;
 		Gazer *gazer;
+		b2Body *ground;
 		Pool<Debris, 64> debris;
 		float scrollMeters;
 		
 		DebugDraw dbgDraw;
 		bool doDebugDraw;
+		float timeToNextSpawn;
 		
 		
 	public:
@@ -157,7 +168,8 @@ namespace Blindr {
 	
 	private:
 		void handleEvents();
-		b2Body *createFloor(b2Vec2 p0, b2Vec2 p1);
+		void createWalls();
+		void createFloor(b2Vec2 p0, b2Vec2 p1);
 		void checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact);
 		
 		void initializeGeometry(b2Vec2 *outPlayerPosition);
