@@ -40,4 +40,5 @@ Blindr::FloorData Blindr::kFloors[] = {
 	{2,199,3},
 };
 Blindr::BoxData Blindr::kBoxes[] = {
+	{0,0}
 };

@@ -87,7 +87,12 @@ void VectorGraphics::init() {
 	
 	{ // plot cubic vertices
 		CubicVertex verts[CUBIC_RESOLUTION+1];
-		verts[0] = { 0, 0, 0, 0, 0 };
+		//verts[0] = { 0, 0, 0, 0, 0 };
+		verts[0].x = 0;
+		verts[0].y = 0;
+		verts[0].z = 0;
+		verts[0].w = 0;
+		verts[0].s = 0;
 		for(int i=0; i<CUBIC_RESOLUTION/2; ++i) {
 			float u = i/float(CUBIC_RESOLUTION/2-1);
 			verts[1+2*i].x = u*u*u;
@@ -287,14 +292,16 @@ void VectorGraphics::drawCircle(vec2 p, float depth) {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_RESOLUTION);
 }
 
-
+#define SIMPLE_CAPACITY 256
+static vec2 simpleBuffer[SIMPLE_CAPACITY];
 
 void VectorGraphics::drawSemicircle(vec2 p, Color c, float r, float startAngle, float endAngle, int resolution) {
+	ASSERT(resolution + 2 <= SIMPLE_CAPACITY);
 	setMaterial(&simpleRenderer);
 	simpleRenderer.setMvp((matrix() * translationMatrix(p, 0.0f)).m);
 	simpleRenderer.setColor(c.red(), c.green(), c.blue(), c.alpha());
 	
-	vec2 verts[resolution + 2];
+	vec2 *verts = simpleBuffer;
 	verts[0] = vec(0,0);
 	vec2 unit = polar(r, startAngle);
 	vec2 rot = polar(1, (endAngle - startAngle)/resolution);
