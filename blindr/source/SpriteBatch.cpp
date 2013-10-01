@@ -280,8 +280,12 @@ inline void doPlotTile(int x, int y, TilemapCoord coord) {
 
 
 void SpriteBatch::drawTilemap(vec2 viewOffset) {
+	viewOffset.x = floorf(64 * viewOffset.x) / 64.0f;
+	viewOffset.y = floorf(64 * viewOffset.y) / 64.0f;
+
 	ASSERT(sTilemapAsset);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+	//TODO: Skip empties
 
 	int vox = int(viewOffset.x/sTilemapAsset->tw);
 	int voy = int(viewOffset.y/sTilemapAsset->th);
@@ -300,7 +304,7 @@ void SpriteBatch::drawTilemap(vec2 viewOffset) {
 		doPlotTile(x, y, sTilemapCoords[(y+voy) * sTilemapAsset->mw + (x+vox)]);
 	}
 	end();
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 }
 
 

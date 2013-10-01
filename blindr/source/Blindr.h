@@ -7,11 +7,13 @@
 #define PixelsPerMeter   24
 #define MetersPerPixel   (1.0f/PixelsPerMeter)
 #define PlayerRunForce   10.0f
-#define PlayerJumpForce  13.0f
+#define PlayerJumpForce  13.5f
 #define PlayerWalkFPS    10
 #define PlayerIdleFPS    12
-#define PlayerHalfWidth  0.5f
+#define PlayerHalfWidth  0.45f
 #define PlayerHalfHeight 0.5f
+#define TilemapOffsetX   8
+#define ScrollMetersPerSecond 0.25f
 
 inline vec2 vec(b2Vec2 bv) { return vec(bv.x, bv.y); }
 inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
@@ -48,6 +50,21 @@ namespace Blindr {
 		bool isDebris() const { return userType == btDebris; }
 	};
 	
+	struct FloorData {
+		int tx, ty, tw;
+	};
+	
+	struct BoxData {
+		int tx, ty;
+	};
+	
+	extern int kFloorCount;
+	extern int kBoxCount;
+	extern int kLevelW;
+	extern int kLevelH;
+	extern FloorData kFloors[];
+	extern BoxData kBoxes[];
+	
 	//---------------------------------------------------------------------------------------
 	// GAME OBJECTS
 	//---------------------------------------------------------------------------------------
@@ -62,7 +79,7 @@ namespace Blindr {
 		bool pressingRight;
 
 	public:
-		Player(World *world);
+		Player(World *world, b2Vec2 playerPos);
 		
 		
 		void leftPressed() { pressingLeft = true; facingRight = false; }
@@ -112,9 +129,10 @@ namespace Blindr {
 
 	class World : public b2ContactListener {
 		b2World sim;
-		Player player;
-		Gazer gazer;
+		Player *player;
+		Gazer *gazer;
 		Pool<Debris, 64> debris;
+		float scrollMeters;
 		
 		DebugDraw dbgDraw;
 		bool doDebugDraw;
@@ -125,7 +143,8 @@ namespace Blindr {
 
 		b2World* getSim() { return &sim; }
 		b2Vec2 screenSize() { return bvec(Graphics::canvasSize() * MetersPerPixel); }
-		Player* getPlayer() { return &player; }
+		Player* getPlayer() { return player; }
+		Gazer* getGazer() { return gazer; }
 		
 		void run();
 
@@ -138,6 +157,8 @@ namespace Blindr {
 		void handleEvents();
 		b2Body *createFloor(b2Vec2 p0, b2Vec2 p1);
 		void checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact);
+		
+		void initializeGeometry(b2Vec2 *outPlayerPosition);
 	};
 	
 	//---------------------------------------------------------------------------------------

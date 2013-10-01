@@ -90,6 +90,7 @@
 		50A56FB917FA16AF001D47B9 /* porn_industryy.xm in Resources */ = {isa = PBXBuildFile; fileRef = 50A56FB817FA16AE001D47B9 /* porn_industryy.xm */; };
 		50ADF13217FA98D1005619B7 /* Debris.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13017FA98D1005619B7 /* Debris.cpp */; };
 		50ADF13917FA9C8E005619B7 /* Gazer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13717FA9C8E005619B7 /* Gazer.cpp */; };
+		50ADF13B17FB48C0005619B7 /* BlindrData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13A17FB48C0005619B7 /* BlindrData.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -288,6 +289,7 @@
 		50A56FB817FA16AE001D47B9 /* porn_industryy.xm */ = {isa = PBXFileReference; lastKnownFileType = file; path = porn_industryy.xm; sourceTree = "<group>"; };
 		50ADF13017FA98D1005619B7 /* Debris.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Debris.cpp; sourceTree = "<group>"; };
 		50ADF13717FA9C8E005619B7 /* Gazer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gazer.cpp; sourceTree = "<group>"; };
+		50ADF13A17FB48C0005619B7 /* BlindrData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlindrData.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +414,7 @@
 				505FCFA917FA399A00477C47 /* DebugDraw.h */,
 				505FCFA817FA399A00477C47 /* DebugDraw.cpp */,
 				500BE27717FA4788008E7063 /* Blindr.h */,
+				50ADF13A17FB48C0005619B7 /* BlindrData.cpp */,
 				500BE27617FA4788008E7063 /* Blindr.cpp */,
 				500BE27D17FA5849008E7063 /* Player.cpp */,
 				50ADF13017FA98D1005619B7 /* Debris.cpp */,
@@ -736,6 +739,7 @@
 				504BA07317FA0289004E4827 /* SpriteShader.cpp in Sources */,
 				505FCF8417FA364400477C47 /* b2CircleShape.cpp in Sources */,
 				505FCF9517FA364400477C47 /* b2CircleContact.cpp in Sources */,
+				50ADF13B17FB48C0005619B7 /* BlindrData.cpp in Sources */,
 				505FCF9417FA364400477C47 /* b2ChainAndPolygonContact.cpp in Sources */,
 				505FCFAA17FA399A00477C47 /* DebugDraw.cpp in Sources */,
 				505FCF8517FA364400477C47 /* b2EdgeShape.cpp in Sources */,

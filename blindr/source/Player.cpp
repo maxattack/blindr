@@ -1,14 +1,16 @@
 #include "Blindr.h"
 
-Blindr::Player::Player(World *world) : BodyUserdata(btPlayer),
-                                       groundCount(0),
-                                       facingRight(true),
-                                       pressingLeft(false),
-                                       pressingRight(false) {
+Blindr::Player::Player(World *world, b2Vec2 playerPos) :
+BodyUserdata(btPlayer),
+groundCount(0),
+facingRight(true),
+pressingLeft(false),
+pressingRight(false) {
 
 	b2BodyDef bodyParams;
 	bodyParams.type = b2_dynamicBody;
-	bodyParams.position.Set( 0.5f * world->screenSize().x, 1);
+	bodyParams.position = playerPos;
+	bodyParams.position.y -= 0.5f;
 	bodyParams.fixedRotation = true;
 	bodyParams.userData = this;
 	body = world->getSim()->CreateBody(&bodyParams);
@@ -27,7 +29,7 @@ Blindr::Player::Player(World *world) : BodyUserdata(btPlayer),
 	hitbox = body->CreateFixture(&hitboxParams);
 	
 	b2PolygonShape footShape;
-	footShape.SetAsBox(0.5f, 0.05f, b2Vec2(0, 0.99f * PlayerHalfHeight), 0);
+	footShape.SetAsBox(0.99f * PlayerHalfWidth, 0.05f, b2Vec2(0, PlayerHalfHeight), 0);
 	
 	b2FixtureDef footParams;
 	footParams.shape = &footShape;

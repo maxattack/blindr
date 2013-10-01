@@ -7,6 +7,9 @@
 
 struct GameAssets {
 	
+	TextureAsset *Background;
+	ImageAsset *background;
+	
 	TextureAsset *Sprites;
 	ImageAsset *camel;
 	ImageAsset *camel_hump;

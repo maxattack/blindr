@@ -8,6 +8,9 @@
 	/>
 
 	<fontsheet id="flixel" path="nokiafc22.ttf" size="8" />
+	<texture id="Background">
+		<image id="background" path="background.png" />
+	</texture>
 
 	<texture id="Sprites">
 		<image id="camel" path="camel/idle_#.png" pivot="center" />

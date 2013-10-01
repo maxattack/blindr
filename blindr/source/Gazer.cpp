@@ -3,23 +3,23 @@
 
 Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
 
-	b2BodyDef bodyParams;
-	bodyParams.position.x = 0.5f * world->screenSize().x;
-	bodyParams.position.y = 40 * MetersPerPixel;
-	bodyParams.fixedRotation = true;
-	body = world->getSim()->CreateBody(&bodyParams);
-	
-	b2CircleShape shapeParams;
-	shapeParams.m_radius = 1;
-	
-	b2FixtureDef fixParams;
-	fixParams.isSensor = true;
-	fixParams.shape = &shapeParams;
-	body->CreateFixture(&fixParams);
-	
-	b2Vec2 toPlayer = world->getPlayer()->getBody()->GetPosition() - body->GetPosition();
-	irisOffset = vec(0.5f * toPlayer);
-	spotAngle = irisOffset.radians();
+//	b2BodyDef bodyParams;
+//	bodyParams.position.x = 0.5f * world->screenSize().x;
+//	bodyParams.position.y = 40 * MetersPerPixel;
+//	bodyParams.fixedRotation = true;
+//	body = world->getSim()->CreateBody(&bodyParams);
+//	
+//	b2CircleShape shapeParams;
+//	shapeParams.m_radius = 1;
+//	
+//	b2FixtureDef fixParams;
+//	fixParams.isSensor = true;
+//	fixParams.shape = &shapeParams;
+//	body->CreateFixture(&fixParams);
+//	
+//	b2Vec2 toPlayer = world->getPlayer()->getBody()->GetPosition() - body->GetPosition();
+//	irisOffset = vec(0.5f * toPlayer);
+//	spotAngle = irisOffset.radians();
 	
 }
 
@@ -51,7 +51,7 @@ void Blindr::Gazer::draw() {
 		VectorGraphics::drawSemicircle(vec(0,0), rgba(0.01f, 0.01f, 0.1f, 0.6f), 32, 1.9f * M_PI, 2.1f * M_PI, 16);
 	}
 	
-	SpriteBatch::begin(assets->gazer_eyeball->texture);
+	SpriteBatch::begin(assets->Sprites);
 	SpriteBatch::draw(assets->gazer_eyeball, vec(mp, 40));
 	SpriteBatch::draw(assets->gazer_iris, vec(mp, 40) + irisOffset);
 }
