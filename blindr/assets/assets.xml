@@ -13,6 +13,11 @@
 		<image id="camel" path="camel/idle_#.png" pivot="center" />
 		<image id="camel_hump" path="camel/hump.png" pivot="center" />
 		<image id="camel_jump" path="camel/jump_#.png" pivot="center" />
+		<image id="camel_walk" path="camel/walk_#.png" pivot="center" />
+		
+		<image id="gazer_body" path="gazer/gazer_body.png" pivot="center" />
+		<image id="gazer_eyeball" path="gazer/gazer_eyeball.png" pivot="center" />
+		<image id="gazer_iris" path="gazer/gazer_iris.png" pivot="center" />
 	</texture>
 
 

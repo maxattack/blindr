@@ -71,7 +71,7 @@ inline vec2 polar(float radius, float radians) { return {radius*cosf(radians), r
 inline float easeOut2(float u) { return 1.0 - (u=1.0-u)*u; }
 inline float easeOut4(float u) { return 1.0 - (u=1.0-u)*u*u*u; }
 inline float easeInOutBack(float t, float s=1.70158f) { return (s+1)*t*t*t - s*t*t; }
-inline float easeTowards(float curr, float target, float easing, float dt) { return curr + powf(easing, dt) * (target - curr); }
+inline float easeTowards(float curr, float target, float easing, float dt) { return curr + powf(easing, clamp(60*dt)) * (target - curr); }
 inline int randInt(int x) { return rand() % x; }
 inline double randomValue() { return rand() / double(RAND_MAX); }
 inline double randomValue(double u, double v) { return u + randomValue() * (v - u); }

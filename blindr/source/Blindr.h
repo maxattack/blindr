@@ -8,6 +8,7 @@
 #define MetersPerPixel   (1.0f/PixelsPerMeter)
 #define PlayerRunForce   10.0f
 #define PlayerJumpForce  13.0f
+#define PlayerWalkFPS    10
 #define PlayerIdleFPS    12
 #define PlayerHalfWidth  0.5f
 #define PlayerHalfHeight 0.5f
@@ -17,25 +18,41 @@ inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
 
 namespace Blindr {
 
+	//---------------------------------------------------------------------------------------
+	// BASE DECLS
+	//---------------------------------------------------------------------------------------
+
 	class World;
 	class Player;
-
-	inline int pingPong(int i, int n) {
-		i  = i % (2 * n - 2);
-		if (i >= n) {
-			return 2 * (n-1) - i + 1;
-		} else {
-			return i;
-		}
-	}
+	class Debris;
 
 	enum CollisionTypes {
-		ctFloor = 0x001,
-		ctPlayer = 0x002,
-		ctPlayerFoot = 0x004
+		ctFloor =      0x1,
+		ctPlayer =     0x1<<1,
+		ctPlayerFoot = 0x1<<2,
+		ctDebris =     0x1<<3,
+		ctGazer =      0x1<<4
 	};
+	
+	enum BodyUserDataType {
+		btPlayer,
+		btDebris
+	};
+	
+	class BodyUserdata {
+		BodyUserDataType userType;
+	public:
+		BodyUserdata(BodyUserDataType aType) : userType(aType) {}
+		
+		bool isPlayer() const { return userType == btPlayer; }
+		bool isDebris() const { return userType == btDebris; }
+	};
+	
+	//---------------------------------------------------------------------------------------
+	// GAME OBJECTS
+	//---------------------------------------------------------------------------------------
 
-	class Player {
+	class Player : public BodyUserdata {
 		b2Body *body;
 		b2Fixture *hitbox;
 		b2Fixture *foot;
@@ -68,13 +85,41 @@ namespace Blindr {
 		void draw();
 
 	};
+	
+	class Debris : public BodyUserdata {
+		b2Body *body;
+		
+	public:
+		Debris();
+		Debris& init();
+		Debris& release();
+		
+		void draw();
+	};
+	
+	class Gazer {
+		b2Body *body;
+		vec2 irisOffset;
+		float spotAngle;
+	
+	public:
+		Gazer(World *world);
+		
+		void preTick();
+		void postTick();
+		void draw();
+	};
 
 	class World : public b2ContactListener {
 		b2World sim;
 		Player player;
+		Gazer gazer;
+		Pool<Debris, 64> debris;
+		
 		DebugDraw dbgDraw;
 		bool doDebugDraw;
-
+		
+		
 	public:
 		World();
 
@@ -94,7 +139,10 @@ namespace Blindr {
 		b2Body *createFloor(b2Vec2 p0, b2Vec2 p1);
 		void checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact);
 	};
-
+	
+	//---------------------------------------------------------------------------------------
+	// TOP-LEVEL
+	//---------------------------------------------------------------------------------------
 
 	extern GameAssets *assets;
 	extern World * world;

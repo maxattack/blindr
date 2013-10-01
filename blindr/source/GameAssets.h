@@ -11,6 +11,10 @@ struct GameAssets {
 	ImageAsset *camel;
 	ImageAsset *camel_hump;
 	ImageAsset *camel_jump;
+	ImageAsset *camel_walk;
+	ImageAsset *gazer_body;
+	ImageAsset *gazer_eyeball;
+	ImageAsset *gazer_iris;
 	
 	FontAsset *flixel;
 	

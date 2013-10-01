@@ -81,21 +81,19 @@ public:
 };
 
 
-class CubicFillShader : public Graphics::Shader {
+class SimpleShader : public Graphics::Shader {
 private:
-	GLuint mParameter;
+	GLuint mVertex;
 	GLuint mMvp;
 	GLuint mColor;
-	GLuint mPositionMatrix;
 	
 public:
 	void initializeShader();
 
 	
-	GLuint parameterHandle() const { return mParameter; };
+	GLuint vertexHandle() const { return mVertex; };
 	GLuint mvpHandle() const { return mMvp; };
 	GLuint colorHandle() const { return mColor; };
-	GLuint positionMatrixHandle() const { return mPositionMatrix; };
 	
 	void setMvp(const float* buf, bool transpose = 0) {
 		glUniformMatrix4fv(mMvp, 1, transpose, buf);
@@ -105,12 +103,8 @@ public:
 		glUniform4f(mColor, x, y, z, w);
 	}
 
-	void setPositionMatrix(const float* buf, bool transpose = 0) {
-		glUniformMatrix4fv(mPositionMatrix, 1, transpose, buf);
-	}
-
-	void setParameterPointer(float *p, int stride=0) {
-		glVertexAttribPointer(mParameter, 4, GL_FLOAT, GL_FALSE, stride, p);
+	void setVertexPointer(float *p, int stride=0) {
+		glVertexAttribPointer(mVertex, 2, GL_FLOAT, GL_FALSE, stride, p);
 	}
 
 };
@@ -168,6 +162,46 @@ public:
 
 };
 
+
+class CubicFillShader : public Graphics::Shader {
+private:
+	GLuint mParameter;
+	GLuint mMvp;
+	GLuint mColor;
+	GLuint mPositionMatrix;
+	
+public:
+	void initializeShader();
+
+	
+	GLuint parameterHandle() const { return mParameter; };
+	GLuint mvpHandle() const { return mMvp; };
+	GLuint colorHandle() const { return mColor; };
+	GLuint positionMatrixHandle() const { return mPositionMatrix; };
+	
+	void setMvp(const float* buf, bool transpose = 0) {
+		glUniformMatrix4fv(mMvp, 1, transpose, buf);
+	}
+
+	void setColor(float x, float y, float z, float w) {
+		glUniform4f(mColor, x, y, z, w);
+	}
+
+	void setPositionMatrix(const float* buf, bool transpose = 0) {
+		glUniformMatrix4fv(mPositionMatrix, 1, transpose, buf);
+	}
+
+	void setParameterPointer(float *p, int stride=0) {
+		glVertexAttribPointer(mParameter, 4, GL_FLOAT, GL_FALSE, stride, p);
+	}
+
+};
+
+
+class SimpleMaterial : public Graphics::Material {
+public:
+	void initializeMaterial(SimpleShader* shader);
+};
 
 class ArcMaterial : public Graphics::Material {
 public:

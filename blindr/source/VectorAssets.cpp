@@ -62,35 +62,33 @@ void CircleShader::initializeShader() {
 }
 
 
-static const char sCubicFillShaderVertSrc[] = 
-	"uniform mediump mat4 positionMatrix;\n"
+static const char sSimpleShaderVertSrc[] = 
 	"uniform mediump mat4 mvp;\n"
-	"attribute mediump vec4 parameter;\n"
+	"attribute mediump vec2 vertex;\n"
 	"void main ()\n"
 	"{\n"
 	"  mediump vec4 tmpvar_1;\n"
-	"  tmpvar_1.w = 1.0;\n"
-	"  tmpvar_1.xyz = (positionMatrix * parameter).xyz;\n"
+	"  tmpvar_1.zw = vec2(0.0, 1.0);\n"
+	"  tmpvar_1.xy = vertex;\n"
 	"  mediump vec4 tmpvar_2;\n"
 	"  tmpvar_2 = (mvp * tmpvar_1);\n"
 	"  gl_Position = tmpvar_2;\n"
 	"}\n";
 
-static const char sCubicFillShaderFragSrc[] = 
+static const char sSimpleShaderFragSrc[] = 
 	"uniform lowp vec4 color;\n"
 	"void main ()\n"
 	"{\n"
 	"  gl_FragColor = color;\n"
 	"}\n";
 
-void CubicFillShader::initializeShader() {
-	compile(sCubicFillShaderVertSrc, sCubicFillShaderFragSrc);
-	mParameter = glGetAttribLocation(progHandle(), "parameter");
+void SimpleShader::initializeShader() {
+	compile(sSimpleShaderVertSrc, sSimpleShaderFragSrc);
+	mVertex = glGetAttribLocation(progHandle(), "vertex");
 	mMvp = glGetUniformLocation(progHandle(), "mvp");
 	mColor = glGetUniformLocation(progHandle(), "color");
-	mPositionMatrix = glGetUniformLocation(progHandle(), "positionMatrix");
-	mAttribBegin = &mParameter;
-	mAttribEnd = &mParameter+1;
+	mAttribBegin = &mVertex;
+	mAttribEnd = &mVertex+1;
 }
 
 
@@ -132,11 +130,51 @@ void CubicShader::initializeShader() {
 }
 
 
+static const char sCubicFillShaderVertSrc[] = 
+	"uniform mediump mat4 positionMatrix;\n"
+	"uniform mediump mat4 mvp;\n"
+	"attribute mediump vec4 parameter;\n"
+	"void main ()\n"
+	"{\n"
+	"  mediump vec4 tmpvar_1;\n"
+	"  tmpvar_1.w = 1.0;\n"
+	"  tmpvar_1.xyz = (positionMatrix * parameter).xyz;\n"
+	"  mediump vec4 tmpvar_2;\n"
+	"  tmpvar_2 = (mvp * tmpvar_1);\n"
+	"  gl_Position = tmpvar_2;\n"
+	"}\n";
+
+static const char sCubicFillShaderFragSrc[] = 
+	"uniform lowp vec4 color;\n"
+	"void main ()\n"
+	"{\n"
+	"  gl_FragColor = color;\n"
+	"}\n";
+
+void CubicFillShader::initializeShader() {
+	compile(sCubicFillShaderVertSrc, sCubicFillShaderFragSrc);
+	mParameter = glGetAttribLocation(progHandle(), "parameter");
+	mMvp = glGetUniformLocation(progHandle(), "mvp");
+	mColor = glGetUniformLocation(progHandle(), "color");
+	mPositionMatrix = glGetUniformLocation(progHandle(), "positionMatrix");
+	mAttribBegin = &mParameter;
+	mAttribEnd = &mParameter+1;
+}
+
+
+void SimpleMaterial::initializeMaterial(SimpleShader* pShader) {
+	pShader->initializeShader();
+	setShader(pShader);
+	setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	setDepthNone();
+	setTexture(0);
+}
+
 void ArcMaterial::initializeMaterial(ArcShader* pShader) {
 	pShader->initializeShader();
 	setShader(pShader);
 	setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	setDepthFunc(GL_LEQUAL);
+	setDepthNone();
 	setTexture(0);
 }
 
@@ -144,7 +182,7 @@ void CircleMaterial::initializeMaterial(CircleShader* pShader) {
 	pShader->initializeShader();
 	setShader(pShader);
 	setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	setDepthFunc(GL_LEQUAL);
+	setDepthNone();
 	setTexture(0);
 }
 
@@ -152,7 +190,7 @@ void CubicMaterial::initializeMaterial(CubicShader* pShader) {
 	pShader->initializeShader();
 	setShader(pShader);
 	setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	setDepthFunc(GL_LEQUAL);
+	setDepthNone();
 	setTexture(0);
 }
 
@@ -160,7 +198,7 @@ void CubicFillMaterial::initializeMaterial(CubicFillShader* pShader) {
 	pShader->initializeShader();
 	setShader(pShader);
 	setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	setDepthFunc(GL_LEQUAL);
+	setDepthNone();
 	setTexture(0);
 }
 

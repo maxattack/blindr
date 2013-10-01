@@ -1,6 +1,6 @@
 #include "Blindr.h"
 
-Blindr::World::World() : sim(b2Vec2(0,40)), player(this), doDebugDraw(true) {
+Blindr::World::World() : sim(b2Vec2(0,40)), player(this), gazer(this), doDebugDraw(true) {
 	
 	sim.SetContactListener(this);
 	
@@ -88,11 +88,14 @@ void Blindr::World::run() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		player.preTick();
+		gazer.preTick();
 		sim.Step(Time::deltaSeconds(), 8, 8);
 		player.postTick();
+		gazer.postTick();
 		
 		SpriteBatch::begin(assets->camel->texture);
 		player.draw();
+		gazer.draw();
 		SpriteBatch::end();
 		
 		if (doDebugDraw) {

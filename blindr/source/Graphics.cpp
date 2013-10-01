@@ -68,7 +68,7 @@ void Graphics::init(int pxSize, int width, int height, float zNear, float zFar) 
 	glActiveTexture(0);
 	
 	// default clear color it the Little Polygon blue
-	Color cc = rgb(0x191927);
+	Color cc = rgb(0x404d68);
 	glClearColor(cc.red(), cc.green(), cc.blue(), 0);
 
 }

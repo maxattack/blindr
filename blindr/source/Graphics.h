@@ -180,10 +180,9 @@ namespace Graphics {
 		~ScopedTransform() { setMatrix(prev); }
 	};
 	
-	inline int pingPong(int nframes, float t, int fps=12) {
-		int n = (nframes<<1) - 1;
-		int result = int(t * fps) % n;
-		return (result >= nframes) ? result = n-result : result;
+	inline int pingPong(int i, int n) {
+		i  = i % (2 * n - 2);
+		return i >= n ? 2 * (n-1) - i + 1 : i;
 	}
 
 	inline int wrap(int nframes, float t, int fps=12) {

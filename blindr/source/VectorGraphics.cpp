@@ -53,6 +53,10 @@ public:
 	}
 };
 
+class SimpleRenderer : public SimpleMaterial, public SimpleShader {
+
+};
+
 class ArcRenderer : public ArcMaterial, public ArcShader {
 public:	
 	void enable() {
@@ -73,6 +77,7 @@ static CircleRenderer circleRenderer;
 static CubicRenderer cubicRenderer;
 static CubicFillRenderer cubicFillRenderer;
 static ArcRenderer arcRenderer;
+static SimpleRenderer simpleRenderer;
 
 //------------------------------------------------------------------------------
 // INITIALIZATION
@@ -141,7 +146,7 @@ void VectorGraphics::init() {
 	circleRenderer.initializeMaterial(&circleRenderer);
 	arcRenderer.initializeMaterial(&arcRenderer);
 	cubicFillRenderer.initializeMaterial(&cubicFillRenderer);
-	
+	simpleRenderer.initializeMaterial(&simpleRenderer);
 }
 
 void VectorGraphics::release() {
@@ -280,6 +285,27 @@ void VectorGraphics::drawCircle(vec2 p, float depth) {
 	setMaterial(&circleRenderer);
 	circleRenderer.setMvp((matrix() * translationMatrix(p, depth)).m);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_RESOLUTION);
+}
+
+
+
+void VectorGraphics::drawSemicircle(vec2 p, Color c, float r, float startAngle, float endAngle, int resolution) {
+	setMaterial(&simpleRenderer);
+	simpleRenderer.setMvp((matrix() * translationMatrix(p, 0.0f)).m);
+	simpleRenderer.setColor(c.red(), c.green(), c.blue(), c.alpha());
+	
+	vec2 verts[resolution + 2];
+	verts[0] = vec(0,0);
+	vec2 unit = polar(r, startAngle);
+	vec2 rot = polar(1, (endAngle - startAngle)/resolution);
+	for(int i=0; i<=resolution; ++i) {
+		verts[i+1] = unit;
+		unit = cmul(unit, rot);
+	}
+	
+	simpleRenderer.setVertexPointer((float*)verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, resolution+2);
+	simpleRenderer.setVertexPointer(0);
 }
 
 //------------------------------------------------------------------------------
