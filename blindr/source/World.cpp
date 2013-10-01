@@ -1,4 +1,6 @@
 #include "Blindr.h"
+#include <string>
+#include <sstream>
 
 Blindr::World::World() : sim(b2Vec2(0,40)), player(this), gazer(this), doDebugDraw(true) {
 	
@@ -82,6 +84,8 @@ void Blindr::World::handleEvents() {
 }
 
 void Blindr::World::run() {
+
+	SpriteBatch::loadTilemap(assets->level);
 	
 	for(;;) {
 		handleEvents();
@@ -93,6 +97,11 @@ void Blindr::World::run() {
 		player.postTick();
 		gazer.postTick();
 		
+		int y = 4000;// + 100 * Time::seconds();
+		
+		
+		SpriteBatch::drawTilemap(vec(8,y));
+		
 		SpriteBatch::begin(assets->camel->texture);
 		player.draw();
 		gazer.draw();
@@ -103,7 +112,9 @@ void Blindr::World::run() {
 			sim.DrawDebugData();
 		}
 		
-		SpriteBatch::drawLabel(assets->flixel, "Blindr 0.1", vec(0,0));
+		std::stringstream msg;
+		msg << "Y = " << int(y * MetersPerPixel) << "m";
+		SpriteBatch::drawLabel(assets->flixel, msg.str().c_str(), vec(0,0));
 		
 		SDL_GL_SwapWindow(Graphics::window());
 	}

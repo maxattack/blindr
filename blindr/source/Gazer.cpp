@@ -17,7 +17,8 @@ Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
 	fixParams.shape = &shapeParams;
 	body->CreateFixture(&fixParams);
 	
-	postTick();
+	b2Vec2 toPlayer = world->getPlayer()->getBody()->GetPosition() - body->GetPosition();
+	irisOffset = vec(0.5f * toPlayer);
 	spotAngle = irisOffset.radians();
 	
 }
