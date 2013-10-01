@@ -52,8 +52,9 @@ void Graphics::init(int pxSize, int width, int height, float zNear, float zFar) 
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	pWindow = SDL_CreateWindow("BLINDR", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pxSize*width, pxSize*height, SDL_WINDOW_OPENGL);
-	
 	SDL_GL_CreateContext(pWindow);
+	GLenum err = glewInit();
+	LOG(("GLEW ? %d", err == GLEW_OK));
 	
 	// default mvp is just the canvas
 	int w, h;

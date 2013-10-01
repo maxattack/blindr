@@ -17,6 +17,10 @@
 #pragma once
 #include "Macros.h"
 #include "Math.h"
+
+#define GLEW_STATIC 1
+#include "glew.h"
+
 #if TARGET_OS_IPHONE
 #include "SDL_opengles2.h"
 #else 

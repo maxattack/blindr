@@ -91,6 +91,7 @@
 		50ADF13217FA98D1005619B7 /* Debris.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13017FA98D1005619B7 /* Debris.cpp */; };
 		50ADF13917FA9C8E005619B7 /* Gazer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13717FA9C8E005619B7 /* Gazer.cpp */; };
 		50ADF13B17FB48C0005619B7 /* BlindrData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF13A17FB48C0005619B7 /* BlindrData.cpp */; };
+		50ADF14A17FB6BE9005619B7 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF14617FB6BE9005619B7 /* glew.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -290,6 +291,10 @@
 		50ADF13017FA98D1005619B7 /* Debris.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Debris.cpp; sourceTree = "<group>"; };
 		50ADF13717FA9C8E005619B7 /* Gazer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gazer.cpp; sourceTree = "<group>"; };
 		50ADF13A17FB48C0005619B7 /* BlindrData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlindrData.cpp; sourceTree = "<group>"; };
+		50ADF14617FB6BE9005619B7 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glew.c; sourceTree = "<group>"; };
+		50ADF14717FB6BE9005619B7 /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glew.h; sourceTree = "<group>"; };
+		50ADF14817FB6BE9005619B7 /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glxew.h; sourceTree = "<group>"; };
+		50ADF14917FB6BE9005619B7 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wglew.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +328,7 @@
 				505FCF0217FA209A00477C47 /* SDL_mixer.xcodeproj */,
 				504BA02417F9FF61004E4827 /* SDL.xcodeproj */,
 				504BA04D17FA0236004E4827 /* Source */,
+				50ADF14517FB6BE9005619B7 /* glew */,
 				505FCF1817FA364400477C47 /* Box2D */,
 				50A56FA317FA0FBF001D47B9 /* Assets */,
 				504B9FED17F9FD89004E4827 /* Frameworks */,
@@ -601,6 +607,18 @@
 			path = blindr/assets;
 			sourceTree = "<group>";
 		};
+		50ADF14517FB6BE9005619B7 /* glew */ = {
+			isa = PBXGroup;
+			children = (
+				50ADF14617FB6BE9005619B7 /* glew.c */,
+				50ADF14717FB6BE9005619B7 /* glew.h */,
+				50ADF14817FB6BE9005619B7 /* glxew.h */,
+				50ADF14917FB6BE9005619B7 /* wglew.h */,
+			);
+			name = glew;
+			path = blindr/glew;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -719,6 +737,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50ADF14A17FB6BE9005619B7 /* glew.c in Sources */,
 				505FCFA717FA364400477C47 /* b2Rope.cpp in Sources */,
 				505FCF8E17FA364400477C47 /* b2ContactManager.cpp in Sources */,
 				505FCF8617FA364400477C47 /* b2PolygonShape.cpp in Sources */,
