@@ -40,7 +40,6 @@
   #define USE_SSE3      0
   #define USE_NEON      0
   #define VEC4_ALIGNED  
-  #warning "NO SIMD!"
 #endif
 
 union vec4 {

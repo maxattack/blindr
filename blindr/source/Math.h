@@ -18,7 +18,6 @@
 #include "Macros.h"
 
 // CONSTANTS
-
 #define M_TAU             (M_PI+M_PI)
 #define M_COLINEAR_SLOP   (0.0001f)
 
@@ -150,7 +149,7 @@ inline AABB aabb(float x, float y, float w, float h) {
 	AABB result = { x, y, w, h };
 	return result;
 }
-inline AABB aabb(vec2 p, vec2 s) { return { p.x, p.y, s.x, s.y }; }
+inline AABB aabb(vec2 p, vec2 s) { return aabb( p.x, p.y, s.x, s.y ); }
 inline AABB unionOf(AABB u, AABB v) { return aabb(MIN(u.x, v.x), MIN(u.y, v.y), MAX(u.x+u.w, v.x+v.w), MAX(u.y+u.h, v.y+v.h)); }
 
 struct ivec2;
@@ -172,6 +171,6 @@ inline ivec2 ivec(int x, int y) {
 	result.y = y;
 	return result;
 }
-inline ivec2 floor(vec2 v) { return { int(v.x), int(v.y) }; }
+inline ivec2 floor(vec2 v) { return ivec( int(v.x), int(v.y) ); }
 
 
