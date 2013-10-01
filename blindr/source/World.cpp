@@ -57,6 +57,11 @@ void Blindr::World::handleEvents() {
 				doDebugDraw = !doDebugDraw;
 				break;
 				
+			case SDLK_ESCAPE:
+				SDL_Quit();
+				exit(0);
+				break;
+				
 			}
 			
 			
@@ -76,7 +81,11 @@ void Blindr::World::handleEvents() {
 			}
 		
 			break;
-			
+		
+		case SDL_QUIT:
+			SDL_Quit();
+			exit(0);
+			break;
 		}
 	}
 }
