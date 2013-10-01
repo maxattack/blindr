@@ -1,0 +1,21 @@
+<assets id="GameAssets" target="gles">
+	<output
+		wordsize="32"
+		endian="little"
+		binpath="assets.bin"
+		pfpath="assets.pf"
+		srcdir="../source"
+	/>
+
+	<fontsheet id="flixel" path="nokiafc22.ttf" size="8" />
+
+	<texture id="Sprites">
+		<image id="camel" path="camel/idle_#.png" pivot="center" />
+		<image id="hump" path="camel/hump.png" pivot="center" />
+	</texture>
+
+
+	<sample id="jump" path="sfx/jump.wav" />
+
+
+</assets>
