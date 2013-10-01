@@ -11,7 +11,8 @@
 
 	<texture id="Sprites">
 		<image id="camel" path="camel/idle_#.png" pivot="center" />
-		<image id="hump" path="camel/hump.png" pivot="center" />
+		<image id="camel_hump" path="camel/hump.png" pivot="center" />
+		<image id="camel_jump" path="camel/jump_#.png" pivot="center" />
 	</texture>
 
 
