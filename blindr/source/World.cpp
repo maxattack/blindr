@@ -92,10 +92,10 @@ void Blindr::World::run() {
 		scrollMeters -= ScrollMetersPerSecond * Time::deltaSeconds();
 		
 		player->preTick();
-//		gazer->preTick();
+		gazer->preTick();
 		sim.Step(Time::deltaSeconds(), 8, 8);
 		player->postTick();
-//		gazer->postTick();
+		gazer->postTick();
 		
 		SpriteBatch::begin(assets->Background);
 		SpriteBatch::draw(assets->background, vec(0,0));
@@ -110,15 +110,15 @@ void Blindr::World::run() {
 		
 			SpriteBatch::begin(assets->Sprites);
 			player->draw();
-//			gazer->draw();
+			gazer->draw();
 			SpriteBatch::end();
 		
 			if (doDebugDraw) { sim.DrawDebugData(); }
 		}
 			
-		std::stringstream msg;
-		msg << "Y = " << int(scrollMeters) << "m";
-		SpriteBatch::drawLabel(assets->flixel, msg.str().c_str(), vec(0,0));
+//		std::stringstream msg;
+//		msg << "Y = " << int(scrollMeters) << "m";
+//		SpriteBatch::drawLabel(assets->flixel, msg.str().c_str(), vec(0,0));
 		
 		SDL_GL_SwapWindow(Graphics::window());
 	}

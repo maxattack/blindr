@@ -68,8 +68,14 @@ inline vec2 cdiv(vec2 u, vec2 v) {
 	return {(u.x*v.x+u.y*v.y)*normInv, (v.x*u.y-u.x*v.y)*normInv};
 }
 inline vec2 polar(float radius, float radians) { return {radius*cosf(radians), radius*sinf(radians)}; }
-inline float easeOut2(float u) { return 1.0 - (u=1.0-u)*u; }
-inline float easeOut4(float u) { return 1.0 - (u=1.0-u)*u*u*u; }
+inline float easeOut2(float u) {
+	u=1.0-u;
+	return 1.0 - u*u;
+}
+inline float easeOut4(float u) {
+	u=1.0-u;
+	return 1.0 - u*u*u*u;
+}
 inline float easeInOutBack(float t, float s=1.70158f) { return (s+1)*t*t*t - s*t*t; }
 inline float easeTowards(float curr, float target, float easing, float dt) { return curr + powf(easing, clamp(60*dt)) * (target - curr); }
 inline int randInt(int x) { return rand() % x; }
@@ -103,7 +109,11 @@ inline float radianDiff(float lhs, float rhs) {
 		return result;
 	}
 }
-	
+
+inline float easeRadians(float curr, float target, float easing, float dt) {
+	return curr + powf(easing, clamp(60*dt)) * radianDiff(target, curr);
+}
+
 bool linearIntersection(vec2 u0, vec2 u1, vec2 v0, vec2 v1, float& u);
 bool linearIntersection(vec2 u0, vec2 u1, vec2 v0, vec2 v1, float& u, float& v);
 

@@ -14,6 +14,7 @@
 #define PlayerHalfHeight 0.5f
 #define TilemapOffsetX   8
 #define ScrollMetersPerSecond 0.25f
+#define GazerOffset      0.5f
 
 inline vec2 vec(b2Vec2 bv) { return vec(bv.x, bv.y); }
 inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
@@ -145,6 +146,7 @@ namespace Blindr {
 		b2Vec2 screenSize() { return bvec(Graphics::canvasSize() * MetersPerPixel); }
 		Player* getPlayer() { return player; }
 		Gazer* getGazer() { return gazer; }
+		float getScrollMeters() const { return scrollMeters; }
 		
 		void run();
 
