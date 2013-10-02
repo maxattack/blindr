@@ -94,6 +94,7 @@
 		50ADF14F17FBB282005619B7 /* IntroCutscene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ADF14D17FBB282005619B7 /* IntroCutscene.cpp */; };
 		50EBEADC17FBC65F007DD76C /* Space Camel.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 50EBEADB17FBC65F007DD76C /* Space Camel.ogg */; };
 		50EBF06917FBC6F4007DD76C /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50EBF06817FBC6EC007DD76C /* libSDL2_mixer.a */; };
+		50F190A917FBF2D8000565E3 /* OutroCutscene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F190A717FBF2D8000565E3 /* OutroCutscene.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -299,6 +300,7 @@
 		50ADF14D17FBB282005619B7 /* IntroCutscene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntroCutscene.cpp; sourceTree = "<group>"; };
 		50EBEADB17FBC65F007DD76C /* Space Camel.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Space Camel.ogg"; sourceTree = "<group>"; };
 		50EBF06317FBC6EC007DD76C /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../sdk/SDL2_mixer-2.0.0/Xcode-iOS copy/SDL_mixer.xcodeproj"; sourceTree = "<group>"; };
+		50F190A717FBF2D8000565E3 /* OutroCutscene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OutroCutscene.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -432,6 +434,7 @@
 				500E04A017FBE3DA00DD2578 /* Explosion.cpp */,
 				500BE28017FA5884008E7063 /* World.cpp */,
 				50ADF14D17FBB282005619B7 /* IntroCutscene.cpp */,
+				50F190A717FBF2D8000565E3 /* OutroCutscene.cpp */,
 				504B9FFA17F9FD89004E4827 /* main.cpp */,
 			);
 			name = Source;
@@ -772,6 +775,7 @@
 				505FCF9A17FA364400477C47 /* b2PolygonAndCircleContact.cpp in Sources */,
 				505FCF9817FA364400477C47 /* b2EdgeAndCircleContact.cpp in Sources */,
 				504BA07617FA0289004E4827 /* VectorAssets.cpp in Sources */,
+				50F190A917FBF2D8000565E3 /* OutroCutscene.cpp in Sources */,
 				505FCF9E17FA364400477C47 /* b2GearJoint.cpp in Sources */,
 				505FCF9917FA364400477C47 /* b2EdgeAndPolygonContact.cpp in Sources */,
 				505FCF1117FA27A800477C47 /* GameAssets.cpp in Sources */,
@@ -931,6 +935,7 @@
 					./blindr,
 				);
 				INFOPLIST_FILE = "blindr/blindr-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -956,6 +961,7 @@
 					./blindr,
 				);
 				INFOPLIST_FILE = "blindr/blindr-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -1,7 +1,15 @@
 #include "Blindr.h"
 
-bool Blindr::World::introYield() {
+void Blindr::World::drawBackground() {
+	SpriteBatch::begin(assets->Background);
+	SpriteBatch::draw(assets->background, vec(0,0));
+	SpriteBatch::end();
 	
+	drawTilemap();
+
+}
+
+bool Blindr::World::simpleYield() {
 	bool result = false;
 
 	SDL_GL_SwapWindow(Graphics::window());
@@ -15,16 +23,18 @@ bool Blindr::World::introYield() {
 			result |= (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_SPACE);
 		}
 	}
-	
-	SpriteBatch::begin(assets->Background);
-	SpriteBatch::draw(assets->background, vec(0,0));
-	SpriteBatch::end();
-	
-	drawTilemap();
+	return result;
+}
+
+bool Blindr::World::cutsceneYield() {	
+	bool result = simpleYield();
+	drawBackground();
 	return result;
 }
 
 void Blindr::World::titleScene() {
+
+	drawBackground();
 
 	do {
 		{
@@ -35,9 +45,13 @@ void Blindr::World::titleScene() {
 		SpriteBatch::end();
 		}
 		
+		SpriteBatch::begin(assets->Title);
+		SpriteBatch::draw(assets->title, 0.5f * Graphics::canvasSize());
+		SpriteBatch::end();
+		
 		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Element: Juggler\nCode: xeW // Art: Blob // Music: Derris-Kharlan", vec(0.5f, 0.8f) * Graphics::canvasSize());
 		
-	} while(!introYield());
+	} while(!cutsceneYield());
 	
 }
 
@@ -51,7 +65,7 @@ void Blindr::World::introCutscene() {
 //			gazer->drawIntro(0);
 //			SpriteBatch::end();
 //		}
-//		introYield();
+//		cutsceneYield();
 //	}
 
 	
@@ -64,7 +78,7 @@ void Blindr::World::introCutscene() {
 			gazer->drawIntro(u);
 			SpriteBatch::end();
 		}
-		introYield();
+		cutsceneYield();
 	}
 	
 	// eye appears
@@ -78,7 +92,7 @@ void Blindr::World::introCutscene() {
 			gazer->drawRaw(easeOut4(u));
 			SpriteBatch::end();
 		}
-		introYield();
+		cutsceneYield();
 	}
 	
 	
@@ -103,7 +117,7 @@ void Blindr::World::introCutscene() {
 			gazer->drawRaw();
 			SpriteBatch::end();
 		}
-		introYield();
+		cutsceneYield();
 	}
 	Audio::playSample(assets->juggle);
 	
@@ -125,7 +139,7 @@ void Blindr::World::introCutscene() {
 
 			SpriteBatch::end();
 		}
-		introYield();
+		cutsceneYield();
 	}
 	
 	// explodes
@@ -137,7 +151,7 @@ void Blindr::World::introCutscene() {
 			SpriteBatch::begin(assets->Sprites);
 			player->drawIdle();
 			
-			gazer->drawRaw(1 - parabola(u));
+			gazer->drawRaw(1 - parabola(u), true);
 			
 			int eyelidFrame = int(u * 3) % 2;
 			SpriteBatch::draw(assets->gazer_eyelid, gp, eyelidFrame);
@@ -148,11 +162,13 @@ void Blindr::World::introCutscene() {
 
 			SpriteBatch::end();
 		}
-		introYield();
+		cutsceneYield();
 	}
 	
 	
-	for(float t=0; t<0.5f; t+=Time::deltaSeconds()) {
+	// show go
+	for(float t=0; t<0.85f; t+=Time::deltaSeconds()) {
+		float u = easeOut4(t / 0.85f);
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -160,8 +176,29 @@ void Blindr::World::introCutscene() {
 			gazer->drawRaw();
 			SpriteBatch::end();
 		}
-		introYield();
+		
+		SpriteBatch::setColorMod(rgba(1, 1, 1, u));
+		SpriteBatch::begin(assets->HUD);
+		SpriteBatch::draw(assets->go, 0.5f * Graphics::canvasSize() - (1-u) * vec(0, -64));
+		SpriteBatch::end();
+		SpriteBatch::setColorMod(rgba(1, 1, 1, 1));
+		
+		cutsceneYield();
 	}
 	
-	
+	for(float t=0; t<2.5f; t+=Time::deltaSeconds()) {
+		{
+			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
+			SpriteBatch::begin(assets->Sprites);
+			player->drawIdle();
+			gazer->drawRaw();
+			SpriteBatch::end();
+		}
+		
+		SpriteBatch::begin(assets->HUD);
+		SpriteBatch::draw(assets->go, 0.5f * Graphics::canvasSize());
+		SpriteBatch::end();
+		
+		cutsceneYield();
+	}
 }

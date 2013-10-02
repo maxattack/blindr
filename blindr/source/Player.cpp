@@ -118,6 +118,10 @@ void Blindr::Player::drawIdle() {
 	SpriteBatch::draw(assets->camel_hump, pixelPosition + vec(0, -10));
 }
 
+bool Blindr::Player::dead() {
+	return body->GetPosition().y > world->getScrollMeters() + world->screenSize().y + 5;
+}
+
 
 
 

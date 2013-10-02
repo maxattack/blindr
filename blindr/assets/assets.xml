@@ -12,6 +12,14 @@
 		<image id="background" path="background.png" />
 	</texture>
 
+	<texture id="Title">
+			<image id="title" path="title.png" pivot="center" />
+	</texture>
+
+	<texture id="HUD">
+		<image id="go" path="GO.png" pivot="center" />
+	</texture>
+
 	<texture id="Sprites">
 		<image id="camel" path="camel/idle_#.png" pivot="center" />
 		<image id="camel_hump" path="camel/hump.png" pivot="center" />

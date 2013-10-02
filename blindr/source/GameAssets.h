@@ -10,6 +10,12 @@ struct GameAssets {
 	TextureAsset *Background;
 	ImageAsset *background;
 	
+	TextureAsset *Title;
+	ImageAsset *title;
+	
+	TextureAsset *HUD;
+	ImageAsset *go;
+	
 	TextureAsset *Sprites;
 	ImageAsset *camel;
 	ImageAsset *camel_hump;

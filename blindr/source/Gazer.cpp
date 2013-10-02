@@ -3,7 +3,8 @@
 
 Blindr::Gazer::Gazer(World *world) :
 irisOffset(vec(0,0)),
-blinkTime(-1.0f) {
+blinkTime(-1.0f),
+damage(0) {
 
 	b2BodyDef bodyParams;
 	bodyParams.type = b2_kinematicBody;
@@ -43,12 +44,13 @@ void Blindr::Gazer::postTick() {
 }
 
 		
-void Blindr::Gazer::drawRaw(float spotAmount) {
+void Blindr::Gazer::drawRaw(float spotAmount, bool modAlpha) {
 	vec2 pp = PixelsPerMeter * vec(body->GetPosition());
 	SpriteBatch::draw(assets->gazer_body, pp);
 	SpriteBatch::end();
 	
-	float alpha = 0.6f + 0.35f  * (1-spotAmount);
+	float alpha = 0.6f;
+	if (modAlpha) { alpha += 0.35f  * (1-spotAmount); }
 	
 	// draw the shadow areas
 	{
@@ -122,7 +124,7 @@ void Blindr::Gazer::draw() {
 	if (blinkTime > 0) {
 		float u = 1 - (blinkTime / 0.666f);
 		blinkTime -= Time::deltaSeconds();
-		drawRaw(1 - parabola(u));
+		drawRaw(1 - parabola(u), true);
 		int lidFrame = int(3 * u) % 2;
 		SpriteBatch::draw(assets->gazer_eyelid, PixelsPerMeter * vec(body->GetPosition()), lidFrame);
 	} else {
@@ -130,6 +132,8 @@ void Blindr::Gazer::draw() {
 	}
 		
 }
+
+
 
 
 

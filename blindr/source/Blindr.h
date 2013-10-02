@@ -4,20 +4,21 @@
 #include "GameAssets.h"
 #include "DebugDraw.h"
 
-#define PixelsPerMeter   24
-#define MetersPerPixel   (1.0f/PixelsPerMeter)
-#define PlayerRunForce   12.0f
-#define PlayerJumpForce  15.0f
-#define PlayerWalkFPS    10
-#define PlayerIdleFPS    12
-#define PlayerHalfWidth  0.45f
-#define PlayerHalfHeight 0.5f
-#define TilemapOffsetX   3
+#define PixelsPerMeter        24
+#define MetersPerPixel        (1.0f/PixelsPerMeter)
+#define PlayerRunForce        12.0f
+#define PlayerJumpForce       15.0f
+#define PlayerWalkFPS         10
+#define PlayerIdleFPS         12
+#define PlayerHalfWidth       0.45f
+#define PlayerHalfHeight      0.5f
+#define TilemapOffsetX        3
 #define ScrollMetersPerSecond 0.25f
-#define GazerOffset      0.5f
-#define TimeBetweenSpawns 3.75f
-#define JuggleStrength  0.15f
-#define ExplosionFPS     10
+#define GazerOffset           0.5f
+#define TimeBetweenSpawns     3.75f
+#define JuggleStrength        0.15f
+#define ExplosionFPS          10
+#define GazerHealth           10
 
 
 
@@ -107,6 +108,8 @@ namespace Blindr {
 		void postTick();
 		void draw();
 		
+		bool dead();
+		
 		void drawIdle();
 		
 		bool isHitbox(b2Fixture *fix);
@@ -134,6 +137,7 @@ namespace Blindr {
 		bool didGetJuggled(b2Vec2 normal);
 		// ...and then applied after the physics
 		void applyJuggle();
+		int getDamage() { return juggleCount; }
 		
 		Debris *juggleNext;
 		Debris *next;
@@ -160,6 +164,7 @@ namespace Blindr {
 		vec2 irisOffset;
 		float spotAngle;
 		float blinkTime;
+		int damage;
 	
 	public:
 		Gazer(World *world);
@@ -171,10 +176,13 @@ namespace Blindr {
 		void preTick();
 		void postTick();
 		void draw();
-		void drawRaw(float spotAmount=1.0f);
+		void drawRaw(float spotAmount=1.0f, bool modAlpha=false);
 		void drawIntro(float introAmount);
 		
 		Debris* findCollidingDebris();
+		
+		void takeDamage(int x) { damage += x; }
+		bool dead() { return damage >= GazerHealth; }
 		
 		void fillShadow();
 	};
@@ -208,7 +216,7 @@ namespace Blindr {
 		Gazer* getGazer() { return gazer; }
 		float getScrollMeters() const { return scrollMeters; }
 		
-		void run();
+		void run(bool skipTitle);
 
 		void BeginContact(b2Contact *contact);
 		void EndContact(b2Contact *contact);
@@ -218,7 +226,10 @@ namespace Blindr {
 	private:
 		void titleScene();
 		void introCutscene();
-		bool introYield();
+		bool simpleYield();
+		bool cutsceneYield();
+		
+		void outroCutscene();
 		
 		void handleEvents();
 		void handleContacts();
@@ -234,7 +245,10 @@ namespace Blindr {
 		
 		void initializeGeometry(b2Vec2 *outPlayerPosition);
 		
+		void drawBackground();
 		void drawTilemap();
+		
+		bool gameOver();
 	};
 	
 	//---------------------------------------------------------------------------------------

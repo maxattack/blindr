@@ -143,20 +143,18 @@ void Blindr::World::handleEvents() {
 	}
 }
 
-void Blindr::World::drawTilemap() {
-	SpriteBatch::drawTilemap(vec(TilemapOffsetX,scrollMeters * PixelsPerMeter));
-}
-
-void Blindr::World::run() {
+void Blindr::World::run(bool skipTitle) {
 	SpriteBatch::loadTilemap(assets->level);
 
 	// hack: init the iris
 	gazer->postTick();
 	
-	//titleScene();
-	//introCutscene();
+	if (!skipTitle) {
+		titleScene();
+	}
+	introCutscene();
 	
-	for(;;) {
+	while(!gameOver()) {
 		handleEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
@@ -181,11 +179,7 @@ void Blindr::World::run() {
 		
 		// draw scene
 		
-		SpriteBatch::begin(assets->Background);
-		SpriteBatch::draw(assets->background, vec(0,0));
-		SpriteBatch::end();
-		
-		drawTilemap();
+		drawBackground();
 		
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
@@ -224,6 +218,13 @@ void Blindr::World::run() {
 		SDL_GL_SwapWindow(Graphics::window());
 	}
 	
+	outroCutscene();
+	
+	
+}
+
+void Blindr::World::drawTilemap() {
+	SpriteBatch::drawTilemap(vec(TilemapOffsetX,scrollMeters * PixelsPerMeter));
 }
 
 void Blindr::World::BeginContact(b2Contact *contact) {
@@ -333,6 +334,7 @@ void Blindr::World::handleGazerHit() {
 	if (headDebris == deb) { headDebris = deb->next; }
 	if (deb->next) { deb->next->prev = deb->prev; }
 	if (deb->prev) { deb->prev->next = deb->next; }
+	gazer->takeDamage(deb->getDamage());
 	delete deb;
 	
 	Audio::playSample(assets->expl);
@@ -359,4 +361,8 @@ Blindr::World::~World() {
 	}
 	delete gazer;
 	delete player;
+}
+
+bool Blindr::World::gameOver() {
+	return player->dead() || gazer->dead();
 }

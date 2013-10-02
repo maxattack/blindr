@@ -18,6 +18,8 @@ int main(int argc, char ** argv)
 	SpriteBatch::init();
 	VectorGraphics::init();
 	Audio::init();
+	
+	
 	Blindr::init();
 	
 	// play summadat muzik
@@ -28,7 +30,13 @@ int main(int argc, char ** argv)
 		LOG(("Error: %s", Mix_GetError()));
 	}
 	
-	Blindr::world->run();
+	Blindr::world->run(false);
+	delete Blindr::world;
+	for(;;) {
+		Blindr::world = new World();
+		Blindr::world->run(true);
+		delete Blindr::world;
+	}
 	
 	Audio::release();
 	//VectorGraphics::release();
