@@ -18,6 +18,9 @@
 #include "Macros.h"
 
 // CONSTANTS
+#ifndef M_PI
+#define M_PI 3.14159265359
+#endif
 #define M_TAU             (M_PI+M_PI)
 #define M_COLINEAR_SLOP   (0.0001f)
 

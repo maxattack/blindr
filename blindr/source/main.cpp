@@ -1,9 +1,10 @@
+#include <SDL.h>
 #include "Blindr.h"
 #include <SDL_mixer.h>
 
 using namespace Blindr;
 
-int main(int argc, const char * argv[])
+int main(int argc, char ** argv)
 {
 	//Request OpenGL 3.2 context.
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
