@@ -1,7 +1,9 @@
 #include "Blindr.h"
 #include "Time.h"
 
-Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
+Blindr::Gazer::Gazer(World *world) :
+irisOffset(vec(0,0)),
+blinkTime(-1.0f) {
 
 	b2BodyDef bodyParams;
 	bodyParams.type = b2_kinematicBody;
@@ -11,7 +13,7 @@ Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
 	body = world->getSim()->CreateBody(&bodyParams);
 	
 	b2CircleShape shapeParams;
-	shapeParams.m_radius = 0.4f;
+	shapeParams.m_radius = 0.6f;
 	
 	b2FixtureDef fixParams;
 	fixParams.isSensor = true;
@@ -46,6 +48,8 @@ void Blindr::Gazer::drawRaw(float spotAmount) {
 	SpriteBatch::draw(assets->gazer_body, pp);
 	SpriteBatch::end();
 	
+	float alpha = 0.6f + 0.35f  * (1-spotAmount);
+	
 	// draw the shadow areas
 	{
 		float da = spotAmount * 0.1f * M_PI;
@@ -55,9 +59,9 @@ void Blindr::Gazer::drawRaw(float spotAmount) {
 		
 		Graphics::ScopedTransform rotate(attitudeMatrix( polar(1, spotAngle) ));
 		Graphics::ScopedTransform moveLocal(translationMatrix(vec(-48, 0)));
-		VectorGraphics::drawSemicircle(vec(0,0), rgba(0.01f, 0.01f, 0.1f, 0.6f), Graphics::canvasSize().magnitude(), da, 2.0f * M_PI - da, 64);
+		VectorGraphics::drawSemicircle(vec(0,0), rgba(0.01f, 0.01f, 0.1f, alpha), Graphics::canvasSize().magnitude(), da, 2.0f * M_PI - da, 64);
 		if (spotAmount > 0.0001f) {
-			VectorGraphics::drawSemicircle(vec(0,0), rgba(0.01f, 0.01f, 0.1f, 0.6f), 32, 2.0f * M_PI - da, 2.0f * M_PI + da, 16);
+			VectorGraphics::drawSemicircle(vec(0,0), rgba(0.01f, 0.01f, 0.1f, alpha), 32, 2.0f * M_PI - da, 2.0f * M_PI + da, 16);
 		}
 	}
 	
@@ -107,3 +111,25 @@ Blindr::Debris* Blindr::Gazer::findCollidingDebris() {
 
 	return 0;
 }
+
+void Blindr::Gazer::blink() {
+	if (blinkTime < 0) {
+		blinkTime = 0.666f;
+	}
+}
+
+void Blindr::Gazer::draw() {
+	if (blinkTime > 0) {
+		float u = 1 - (blinkTime / 0.666f);
+		blinkTime -= Time::deltaSeconds();
+		drawRaw(1 - parabola(u));
+		int lidFrame = int(3 * u) % 2;
+		SpriteBatch::draw(assets->gazer_eyelid, PixelsPerMeter * vec(body->GetPosition()), lidFrame);
+	} else {
+		drawRaw();
+	}
+		
+}
+
+
+

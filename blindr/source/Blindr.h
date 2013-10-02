@@ -159,14 +159,18 @@ namespace Blindr {
 		b2Body *body;
 		vec2 irisOffset;
 		float spotAngle;
+		float blinkTime;
 	
 	public:
 		Gazer(World *world);
 		
 		b2Body* getBody() { return body; }
 		
+		void blink();
+		
 		void preTick();
 		void postTick();
+		void draw();
 		void drawRaw(float spotAmount=1.0f);
 		void drawIntro(float introAmount);
 		

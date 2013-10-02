@@ -6,6 +6,7 @@ lastJuggleTime(-1),
 juggleCount(0),
 juggleNext(0),
 next(0),
+prev(0),
 inJuggleList(false) {
 	
 	b2BodyDef bodyParams;

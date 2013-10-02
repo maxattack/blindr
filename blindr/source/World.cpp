@@ -205,7 +205,7 @@ void Blindr::World::run() {
 			}
 			
 			player->draw();
-			gazer->drawRaw();
+			gazer->draw();
 			for (Explosion *p = headExpl; p; ) {
 				Explosion *expl = p;
 				p = p->next;
@@ -336,6 +336,8 @@ void Blindr::World::handleGazerHit() {
 	delete deb;
 	
 	Audio::playSample(assets->expl);
+	gazer->blink();
+	
 	
 	Explosion *expl = new Explosion(pos);
 	expl->next = headExpl;
@@ -349,6 +351,11 @@ Blindr::World::~World() {
 		Debris *deb = p;
 		p = p->next;
 		delete deb;
+	}
+	for(Explosion *p=headExpl; p; ) {
+		Explosion *e = p;
+		p = p->next;
+		delete e;
 	}
 	delete gazer;
 	delete player;
