@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6DDAD8E5-4737-4458-B920-36B0CFE5A4E8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>blindr</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>997123A1-F0BB-4742-B83A-98B051BBF4C9</key>
+		<string>ssh://github.com/maxattack/blindr.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>blindr.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>997123A1-F0BB-4742-B83A-98B051BBF4C9</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/maxattack/blindr.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>997123A1-F0BB-4742-B83A-98B051BBF4C9</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>997123A1-F0BB-4742-B83A-98B051BBF4C9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>blindr</string>
+		</dict>
+	</array>
+</dict>
+</plist>

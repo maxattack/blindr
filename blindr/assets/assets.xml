@@ -21,11 +21,14 @@
 		<image id="gazer_body" path="gazer/gazer_body.png" pivot="center" />
 		<image id="gazer_eyeball" path="gazer/gazer_eyeball.png" pivot="center" />
 		<image id="gazer_iris" path="gazer/gazer_iris.png" pivot="center" />
-
+		<image id="gazer_eyelid" path="gazer/gazer_eyelid_#.png" pivot="center" />
+		
 		<image id="bomb" path="bomb/bomb_fall_0.png" pivot="center" />
 		<image id="bomb_bounce" path="bomb/bomb_bounce_#.png" pivot="center" />
 
 		<image id="combo" path="combo/x#.png" pivot="center" />
+		
+		<image id="explosion" path="explosion/explosion_#.png" pivot="center" />
 
 	</texture>
 
@@ -33,6 +36,7 @@
 	<sample id="jump" path="sfx/jump.wav" />
 	<sample id="juggle" path="sfx/juggle.wav" />
 	<sample id="hit" path="sfx/hit.wav" />
+	<sample id="expl" path="sfx/explosion.wav" />
 
 	<tilemap id="level" path="maps/level.tmx" />
 

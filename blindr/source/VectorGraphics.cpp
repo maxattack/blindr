@@ -315,6 +315,23 @@ void VectorGraphics::drawSemicircle(vec2 p, Color c, float r, float startAngle, 
 	simpleRenderer.setVertexPointer(0);
 }
 
+void VectorGraphics::fillScreen(Color c) {
+	setMaterial(&simpleRenderer);
+	simpleRenderer.setMvp(mat().m);
+	simpleRenderer.setColor(c.red(), c.green(), c.blue(), c.alpha());
+	
+	simpleBuffer[0] = vec(-1,-1);
+	simpleBuffer[1] = vec(1,-1);
+	simpleBuffer[2] = vec(-1,1);
+	simpleBuffer[3] = vec(1,1);
+	
+	simpleRenderer.setVertexPointer((float*)simpleBuffer);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	simpleRenderer.setVertexPointer(0);
+	
+	
+}
+
 //------------------------------------------------------------------------------
 // ARC METHODS
 //------------------------------------------------------------------------------

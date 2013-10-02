@@ -141,17 +141,21 @@ void Blindr::World::handleEvents() {
 	}
 }
 
-void Blindr::World::run() {
+void Blindr::World::drawTilemap() {
+	SpriteBatch::drawTilemap(vec(TilemapOffsetX,scrollMeters * PixelsPerMeter));
+}
 
+void Blindr::World::run() {
+	
 	SpriteBatch::loadTilemap(assets->level);
+	
+	introCutscene();
 	
 	for(;;) {
 		handleEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		scrollMeters -= ScrollMetersPerSecond * Time::deltaSeconds();
-		
-		
 		
 		// update scene
 		timeToNextSpawn -= Time::deltaSeconds();
@@ -174,9 +178,7 @@ void Blindr::World::run() {
 		SpriteBatch::draw(assets->background, vec(0,0));
 		SpriteBatch::end();
 		
-		float y = scrollMeters * PixelsPerMeter;
-		
-		SpriteBatch::drawTilemap(vec(TilemapOffsetX,y));
+		drawTilemap();
 		
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );

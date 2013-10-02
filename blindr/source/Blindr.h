@@ -80,7 +80,6 @@ namespace Blindr {
 
 	class Player : public BodyUserdata {
 		b2Body *body;
-		//b2Fixture *hitbox;
 		b2Fixture *foot;
 		int groundCount;
 		bool facingRight;
@@ -98,7 +97,6 @@ namespace Blindr {
 		
 		b2Body* getBody() { return body; }
 		b2Fixture* getFoot() { return foot; }
-		//b2Fixture* getHitbox() { return hitbox; }
 		
 		void incrementGroundCount() { ++groundCount; }
 		void decrementGroundCount() { if (groundCount) { --groundCount; } }
@@ -109,6 +107,8 @@ namespace Blindr {
 		void preTick();
 		void postTick();
 		void draw();
+		
+		void drawIdle();
 		
 		bool isHitbox(b2Fixture *fix);
 
@@ -146,9 +146,14 @@ namespace Blindr {
 	public:
 		Gazer(World *world);
 		
+		b2Body* getBody() { return body; }
+		
 		void preTick();
 		void postTick();
-		void draw();
+		void draw(float spotAmount=1.0f);
+		void drawIntro(float introAmount);
+		
+		void fillShadow();
 	};
 
 	class World : public b2ContactListener {
@@ -184,6 +189,7 @@ namespace Blindr {
 	
 	private:
 		void introCutscene();
+		void introYield();
 		
 		void handleEvents();
 		void handleContacts();
@@ -197,6 +203,8 @@ namespace Blindr {
 		void checkForJuggle(b2Fixture *fixture, b2Contact *contact);
 		
 		void initializeGeometry(b2Vec2 *outPlayerPosition);
+		
+		void drawTilemap();
 	};
 	
 	//---------------------------------------------------------------------------------------

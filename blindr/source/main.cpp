@@ -21,7 +21,7 @@ int main(int argc, char ** argv)
 	Blindr::init();
 	
 	// play summadat muzik
-	Mix_Music *music = Mix_LoadMUS("porn_industryy.xm");
+	Mix_Music *music = Mix_LoadMUS("Space Camel.ogg");
 	if (music) {
 		Mix_PlayMusic(music, -1);
 	} else {

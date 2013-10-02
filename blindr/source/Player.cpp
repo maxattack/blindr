@@ -111,4 +111,12 @@ void Blindr::Player::draw() {
 	}
 }
 
+void Blindr::Player::drawIdle() {
+	vec2 pixelPosition = vec(PixelsPerMeter * body->GetPosition());
+	SpriteBatch::draw(assets->camel, pixelPosition + vec(6, -4));
+	SpriteBatch::draw(assets->camel_hump, pixelPosition + vec(0, -10));
+}
+
+
+
 

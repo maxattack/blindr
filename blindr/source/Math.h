@@ -124,6 +124,11 @@ inline float easeRadians(float curr, float target, float easing, float dt) {
 	return curr + powf(easing, clamp(60*dt)) * radianDiff(target, curr);
 }
 
+inline float parabola(float x) {
+	x = 1 - x - x;
+	return 1.0f - x * x;
+}
+
 bool linearIntersection(vec2 u0, vec2 u1, vec2 v0, vec2 v1, float& u);
 bool linearIntersection(vec2 u0, vec2 u1, vec2 v0, vec2 v1, float& u, float& v);
 

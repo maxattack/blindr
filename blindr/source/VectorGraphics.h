@@ -34,7 +34,7 @@ void setCircleRadius(float r);
 void drawCircle(vec2 p, float depth=0);
 
 void drawSemicircle(vec2 p, Color c, float r, float startAngle, float endAngle, int resolution);
-
+void fillScreen(Color c);
 
 void setArcColor(Color c);
 void setArcRadius(float r);
