@@ -9,7 +9,13 @@ inline b2Vec2 tileToPosition(int tx, int ty) {
 }
 
 
-Blindr::World::World() : sim(b2Vec2(0,40)), player(0), gazer(0), doDebugDraw(true) {
+Blindr::World::World() :
+sim(b2Vec2(0,40)),
+player(0),
+gazer(0),
+doDebugDraw(false),
+juggleHead(0),
+didHit(false) {
 	
 	sim.SetContactListener(this);
 	
@@ -31,6 +37,26 @@ Blindr::World::World() : sim(b2Vec2(0,40)), player(0), gazer(0), doDebugDraw(tru
 
 	
 	timeToNextSpawn = expovariate(TimeBetweenSpawns);
+}
+
+void Blindr::World::initializeGeometry(b2Vec2 *outPlayerPosition) {
+	int lowestSeen = 0;
+
+	scrollMeters = kLevelH - screenSize().y;
+	
+	for(int i=0; i<kFloorCount; ++i) {
+		FloorData data = kFloors[i];
+		createFloor(tileToPosition(data.tx, data.ty), tileToPosition(data.tx+data.tw, data.ty));
+
+		// position the player over the lowest floor
+		if (data.ty > lowestSeen) {
+			lowestSeen = data.ty;
+			*outPlayerPosition = tileToPosition(data.tx, data.ty);
+			outPlayerPosition->x += 0.5f * data.tw;
+		}
+	}
+	
+	
 }
 
 void Blindr::World::createWalls() {
@@ -138,6 +164,7 @@ void Blindr::World::run() {
 		player->preTick();
 		gazer->preTick();
 		sim.Step(Time::deltaSeconds(), 8, 8);
+		handleContacts();
 		player->postTick();
 		gazer->postTick();
 		
@@ -155,13 +182,23 @@ void Blindr::World::run() {
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 		
 			SpriteBatch::begin(assets->Sprites);
+			
+			for(Debris*p=debris.begin(); p!=debris.end();) {
+				if (p->shouldCull()) {
+					debris.dealloc(p->release());
+				} else {
+					p->draw();
+					++p;
+				}
+			}
+			
 			player->draw();
 			gazer->draw();
 			SpriteBatch::end();
 		
 			if (doDebugDraw) { sim.DrawDebugData(); }
 		}
-			
+					
 //		std::stringstream msg;
 //		msg << "Y = " << int(scrollMeters) << "m";
 //		SpriteBatch::drawLabel(assets->flixel, msg.str().c_str(), vec(0,0));
@@ -192,48 +229,81 @@ void Blindr::World::EndContact(b2Contact *contact) {
 
 
 void Blindr::World::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
-	
-	// file collisions between "Player" and "Floor" if the player is travelling up
+
+	// player collision?
 	if (player->isHitbox(contact->GetFixtureA())) {
-		checkForCloudPlatform(contact->GetFixtureB(), contact);
+		onPlayerCollisionPreSolve(contact->GetFixtureB(), contact);
 	} else if (player->isHitbox(contact->GetFixtureB())) {
-		checkForCloudPlatform(contact->GetFixtureA(), contact);
+		onPlayerCollisionPreSolve(contact->GetFixtureA(), contact);
 	}
+	
 }
 
 void Blindr::World::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {
+	// player collision?
+	if (player->isHitbox(contact->GetFixtureA())) {
+		onPlayerCollisionPostSolve(contact->GetFixtureB(), contact);
+	} else if (player->isHitbox(contact->GetFixtureB())) {
+		onPlayerCollisionPostSolve(contact->GetFixtureA(), contact);
+	}
+}
 
+void Blindr::World::onPlayerCollisionPreSolve(b2Fixture *fixture, b2Contact *contact) {
+	if (fixture->GetFilterData().categoryBits == ctFloor) {
+		checkForCloudPlatform(fixture, contact);
+	}
+}
+	
+void Blindr::World::onPlayerCollisionPostSolve(b2Fixture *fixture, b2Contact *contact) {
+	if (fixture->GetFilterData().categoryBits == ctDebris) {
+		checkForJuggle(fixture, contact);
+	}
 }
 
 void Blindr::World::checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact) {
 	float py = player->getBody()->GetPosition().y + PlayerHalfHeight;
-	//float fy = fixture->GetBody()->GetPosition().y;
 	b2WorldManifold worldMan;
 	contact->GetWorldManifold(&worldMan);
 	float fy = worldMan.points[0].y;
-	if (py > fy && (fixture->GetFilterData().categoryBits & ctFloor) != 0) {
+	if (py > fy) {
 		contact->SetEnabled(false);
 	}
-	
 }
 
-void Blindr::World::initializeGeometry(b2Vec2 *outPlayerPosition) {
-	int lowestSeen = 0;
-
-	scrollMeters = kLevelH - screenSize().y;
+void Blindr::World::checkForJuggle(b2Fixture *fixture, b2Contact *contact) {
+	b2WorldManifold worldMan;
+	contact->GetWorldManifold(&worldMan);
 	
-	for(int i=0; i<kFloorCount; ++i) {
-		FloorData data = kFloors[i];
-		createFloor(tileToPosition(data.tx, data.ty), tileToPosition(data.tx+data.tw, data.ty));
-
-		// position the player over the lowest floor
-		if (data.ty > lowestSeen) {
-			lowestSeen = data.ty;
-			*outPlayerPosition = tileToPosition(data.tx, data.ty);
-			outPlayerPosition->x += 0.5f * data.tw;
+	// normal points from A->B.  We want the direction from the player to the debris
+	b2Vec2 normal = worldMan.normal;
+	if (fixture == contact->GetFixtureA()) {
+		normal = -normal;
+	}
+	// threshold for a juggle is "at least a little uppish"
+	if (normal.y < -0.1f) {
+		Debris *debris = (Debris*) fixture->GetBody()->GetUserData();
+		if (debris->didGetJuggled(normal)) {
+			debris->next = juggleHead;
+			juggleHead = debris;
 		}
+	} else {
+		didHit = true;
 	}
 	
-	
 }
+
+void Blindr::World::handleContacts() {
+	if (juggleHead) {
+		Audio::playSample(assets->juggle);
+	} else if (didHit) {
+		Audio::playSample(assets->hit);
+	}
+	for(Debris *d=juggleHead; d; d=d->next) {
+		d->applyJuggle();
+	}
+	juggleHead = 0;
+	didHit = false;
+}
+
+
 

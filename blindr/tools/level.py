@@ -9,8 +9,6 @@ def main():
 	# load the map
 	tm = tmx.TileMap('assets/maps/level.tmx')
 
-	tmx.renderMap(tm).save('test.png')
-
 
 	# identify the colliders
 	w,h = tm.size

@@ -6,7 +6,7 @@
 
 #define PixelsPerMeter   24
 #define MetersPerPixel   (1.0f/PixelsPerMeter)
-#define PlayerRunForce   10.0f
+#define PlayerRunForce   12.0f
 #define PlayerJumpForce  15.0f
 #define PlayerWalkFPS    10
 #define PlayerIdleFPS    12
@@ -15,7 +15,8 @@
 #define TilemapOffsetX   3
 #define ScrollMetersPerSecond 0.25f
 #define GazerOffset      0.5f
-#define TimeBetweenSpawns 2.5f
+#define TimeBetweenSpawns 3.75f
+#define JuggleStrength  0.15f
 
 inline vec2 vec(b2Vec2 bv) { return vec(bv.x, bv.y); }
 inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
@@ -115,13 +116,26 @@ namespace Blindr {
 	
 	class Debris : public BodyUserdata, public Pooled {
 		b2Body *body;
+		b2Vec2 juggleNormal;
+		float lastJuggleTime;
+		int juggleCount;
 		
 	public:
 		Debris();
 		Debris& init();
 		Debris& release();
 		
+		bool shouldCull();
+		
+		
 		void draw();
+		
+		// juggles are buffered in the contact listener...
+		bool didGetJuggled(b2Vec2 normal);
+		// ...and then applied after the physics
+		void applyJuggle();
+		
+		Debris *next;
 	};
 	
 	class Gazer {
@@ -149,6 +163,8 @@ namespace Blindr {
 		bool doDebugDraw;
 		float timeToNextSpawn;
 		
+		Debris *juggleHead;
+		bool didHit;
 		
 	public:
 		World();
@@ -167,10 +183,18 @@ namespace Blindr {
 		void PostSolve(b2Contact *contact, const b2ContactImpulse *impulse);
 	
 	private:
+		void introCutscene();
+		
 		void handleEvents();
+		void handleContacts();
 		void createWalls();
 		void createFloor(b2Vec2 p0, b2Vec2 p1);
+		
+		void onPlayerCollisionPreSolve(b2Fixture *fixture, b2Contact *contact);
+		void onPlayerCollisionPostSolve(b2Fixture *fixture, b2Contact *contact);
+		
 		void checkForCloudPlatform(b2Fixture *fixture, b2Contact *contact);
+		void checkForJuggle(b2Fixture *fixture, b2Contact *contact);
 		
 		void initializeGeometry(b2Vec2 *outPlayerPosition);
 	};

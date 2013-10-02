@@ -25,10 +25,14 @@
 		<image id="bomb" path="bomb/bomb_fall_0.png" pivot="center" />
 		<image id="bomb_bounce" path="bomb/bomb_bounce_#.png" pivot="center" />
 
+		<image id="combo" path="combo/x#.png" pivot="center" />
+
 	</texture>
 
 
 	<sample id="jump" path="sfx/jump.wav" />
+	<sample id="juggle" path="sfx/juggle.wav" />
+	<sample id="hit" path="sfx/hit.wav" />
 
 	<tilemap id="level" path="maps/level.tmx" />
 

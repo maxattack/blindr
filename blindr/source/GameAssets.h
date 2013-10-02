@@ -20,11 +20,14 @@ struct GameAssets {
 	ImageAsset *gazer_iris;
 	ImageAsset *bomb;
 	ImageAsset *bomb_bounce;
+	ImageAsset *combo;
 	
 	FontAsset *flixel;
 	TilemapAsset *level;
 	
 	SampleAsset *jump;
+	SampleAsset *juggle;
+	SampleAsset *hit;
 	
 };
 
