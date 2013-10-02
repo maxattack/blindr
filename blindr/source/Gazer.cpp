@@ -43,10 +43,15 @@ void Blindr::Gazer::postTick() {
 	}
 }
 
+inline int gazerFrame() {
+	return Graphics::pingPong(int(Time::seconds() * GazerFPS), Blindr::assets->gazer_body->nframes);
+}
 		
 void Blindr::Gazer::drawRaw(float spotAmount, bool modAlpha) {
 	vec2 pp = PixelsPerMeter * vec(body->GetPosition());
-	SpriteBatch::draw(assets->gazer_body, pp);
+	
+	SpriteBatch::draw(assets->gazer_body, pp, gazerFrame());
+	
 	SpriteBatch::end();
 	
 	float alpha = 0.6f;
@@ -76,7 +81,9 @@ void Blindr::Gazer::drawIntro(float introAmount) {
 	float u = 1.0f - introAmount;
 	
 	vec2 pp = PixelsPerMeter * vec(body->GetPosition()) - vec(0, u * 100);
-	SpriteBatch::draw(assets->gazer_body, pp);
+	
+	SpriteBatch::draw(assets->gazer_body, pp, gazerFrame());
+	
 	SpriteBatch::end();
 	
 	// draw the shadow areas
@@ -133,7 +140,20 @@ void Blindr::Gazer::draw() {
 		
 }
 
-
-
+bool Blindr::Gazer::drawOutro() {
+	LOG_FLOAT(blinkTime);
+	if (blinkTime > 0.333f) {
+		float u = 1 - (blinkTime / 0.666f);
+		blinkTime -= Time::deltaSeconds();
+		drawRaw(1 - parabola(u), true);
+		int lidFrame = int(3 * u) % 2;
+		SpriteBatch::draw(assets->gazer_eyelid, PixelsPerMeter * vec(body->GetPosition()), lidFrame);
+		return false;
+	} else {
+		drawRaw(0, true);
+		SpriteBatch::draw(assets->gazer_eyelid, PixelsPerMeter * vec(body->GetPosition()), 1);
+		return true;
+	}
+}
 
 

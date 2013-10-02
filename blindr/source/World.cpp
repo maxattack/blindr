@@ -114,7 +114,12 @@ void Blindr::World::handleEvents() {
 				SDL_Quit();
 				exit(0);
 				break;
-				
+			
+//			case SDLK_k:
+//				gazer->takeDamage(100);
+//				gazer->blink();
+//				break;
+			
 			}
 			
 			

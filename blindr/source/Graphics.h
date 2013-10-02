@@ -182,7 +182,7 @@ namespace Graphics {
 	
 	inline int pingPong(int i, int n) {
 		i  = i % (2 * n - 2);
-		return i >= n ? 2 * (n-1) - i + 1 : i;
+		return i >= n ? 2 * (n-1) - i : i;
 	}
 
 	inline int wrap(int nframes, float t, int fps=12) {

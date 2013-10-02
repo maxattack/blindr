@@ -119,7 +119,7 @@ void Blindr::Player::drawIdle() {
 }
 
 bool Blindr::Player::dead() {
-	return body->GetPosition().y > world->getScrollMeters() + world->screenSize().y + 5;
+	return body->GetPosition().y > world->getScrollMeters() + world->screenSize().y + 4;
 }
 
 

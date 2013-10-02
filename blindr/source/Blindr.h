@@ -19,6 +19,7 @@
 #define JuggleStrength        0.15f
 #define ExplosionFPS          10
 #define GazerHealth           10
+#define GazerFPS              8
 
 
 
@@ -178,6 +179,7 @@ namespace Blindr {
 		void draw();
 		void drawRaw(float spotAmount=1.0f, bool modAlpha=false);
 		void drawIntro(float introAmount);
+		bool drawOutro();
 		
 		Debris* findCollidingDebris();
 		
