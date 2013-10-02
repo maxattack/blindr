@@ -1,8 +1,8 @@
 #include "Blindr.h"
 
-void Blindr::World::introYield() {
+bool Blindr::World::introYield() {
 	
-	
+	bool result = false;
 
 	SDL_GL_SwapWindow(Graphics::window());
 	Time::tick();
@@ -11,6 +11,8 @@ void Blindr::World::introYield() {
 		if (ev.type == SDL_QUIT || (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_ESCAPE)) {
 			SDL_Quit();
 			exit(0);
+		} else {
+			result |= (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_SPACE);
 		}
 	}
 	
@@ -19,26 +21,42 @@ void Blindr::World::introYield() {
 	SpriteBatch::end();
 	
 	drawTilemap();
+	return result;
+}
+
+void Blindr::World::titleScene() {
+
+	do {
+		{
+		Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
+		SpriteBatch::begin(assets->Sprites);
+		player->drawIdle();
+		gazer->drawIntro(0);
+		SpriteBatch::end();
+		}
+		
+		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Mechanic: Juggling\nCode: xeW // Art: Blob // Music: Derris-Kharlan", vec(0.5f, 0.8f) * Graphics::canvasSize());
+		
+	} while(!introYield());
+	
 }
 
 void Blindr::World::introCutscene() {
-	gazer->postTick();
-
-	for(float t=0; t<1.0f; t+=Time::deltaSeconds()) {
-		introYield();
-		{
-			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
-			SpriteBatch::begin(assets->Sprites);
-			player->drawIdle();
-			gazer->drawIntro(0);
-			SpriteBatch::end();
-		}
-	}
+//
+//	for(float t=0; t<1.0f; t+=Time::deltaSeconds()) {
+//		{
+//			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
+//			SpriteBatch::begin(assets->Sprites);
+//			player->drawIdle();
+//			gazer->drawIntro(0);
+//			SpriteBatch::end();
+//		}
+//		introYield();
+//	}
 
 	
 	for(float t=0; t<0.5f; t+=Time::deltaSeconds()) {
 		float u = easeOut2(t/0.5f);
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -46,13 +64,13 @@ void Blindr::World::introCutscene() {
 			gazer->drawIntro(u);
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	
 	// eye appears
 	
 	for(float t=0; t<1.0f; t+=Time::deltaSeconds()) {
 		float u = t / 1.0f;
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -60,6 +78,7 @@ void Blindr::World::introCutscene() {
 			gazer->draw(easeOut4(u));
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	
 	
@@ -69,7 +88,6 @@ void Blindr::World::introCutscene() {
 	
 	for(float t=0.05f; t<0.8f; t+=Time::deltaSeconds()) {
 		float u = 1-easeOut2(1-t/0.8f);
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -85,6 +103,7 @@ void Blindr::World::introCutscene() {
 			gazer->draw();
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	Audio::playSample(assets->juggle);
 	
@@ -94,7 +113,6 @@ void Blindr::World::introCutscene() {
 	
 	for(float t=0.0f; t<1.15f; t+=Time::deltaSeconds()) {
 		float u = t / 1.15f;
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -107,13 +125,13 @@ void Blindr::World::introCutscene() {
 
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	
 	// explodes
 	Audio::playSample(assets->expl);
 	for(float t=0.0f; t<0.65f; t+=Time::deltaSeconds()) {
 		float u = t / 0.65f;
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -130,11 +148,11 @@ void Blindr::World::introCutscene() {
 
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	
 	
 	for(float t=0; t<0.5f; t+=Time::deltaSeconds()) {
-		introYield();
 		{
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
@@ -142,6 +160,7 @@ void Blindr::World::introCutscene() {
 			gazer->draw();
 			SpriteBatch::end();
 		}
+		introYield();
 	}
 	
 	

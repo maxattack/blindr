@@ -188,8 +188,9 @@ namespace Blindr {
 		void PostSolve(b2Contact *contact, const b2ContactImpulse *impulse);
 	
 	private:
+		void titleScene();
 		void introCutscene();
-		void introYield();
+		bool introYield();
 		
 		void handleEvents();
 		void handleContacts();

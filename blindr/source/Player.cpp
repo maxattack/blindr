@@ -112,8 +112,9 @@ void Blindr::Player::draw() {
 }
 
 void Blindr::Player::drawIdle() {
+	int frame = Graphics::pingPong(int(Time::seconds() * PlayerIdleFPS), assets->camel->nframes);
 	vec2 pixelPosition = vec(PixelsPerMeter * body->GetPosition());
-	SpriteBatch::draw(assets->camel, pixelPosition + vec(6, -4));
+	SpriteBatch::draw(assets->camel, pixelPosition + vec(6, -4), frame);
 	SpriteBatch::draw(assets->camel_hump, pixelPosition + vec(0, -10));
 }
 

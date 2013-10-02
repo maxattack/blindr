@@ -146,9 +146,12 @@ void Blindr::World::drawTilemap() {
 }
 
 void Blindr::World::run() {
-	
 	SpriteBatch::loadTilemap(assets->level);
+
+	// hack: init the iris
+	gazer->postTick();
 	
+	titleScene();
 	introCutscene();
 	
 	for(;;) {
