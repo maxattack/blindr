@@ -17,6 +17,9 @@
 #define GazerOffset      0.5f
 #define TimeBetweenSpawns 3.75f
 #define JuggleStrength  0.15f
+#define ExplosionFPS     10
+
+
 
 inline vec2 vec(b2Vec2 bv) { return vec(bv.x, bv.y); }
 inline b2Vec2 bvec(vec2 v) { return b2Vec2(v.x, v.y); }
@@ -138,6 +141,18 @@ namespace Blindr {
 	};
 	
 	
+	class Explosion {
+		float time;
+		vec2 pos;
+		
+	public:
+		Explosion(vec2 aPos) : time(0), pos(aPos), next(0), prev(0) {}
+		
+		bool draw(); // returns if the animation is finished
+		
+		Explosion *next;
+		Explosion *prev;
+	};
 	
 	
 	class Gazer {
@@ -152,7 +167,7 @@ namespace Blindr {
 		
 		void preTick();
 		void postTick();
-		void draw(float spotAmount=1.0f);
+		void drawRaw(float spotAmount=1.0f);
 		void drawIntro(float introAmount);
 		
 		Debris* findCollidingDebris();
@@ -169,6 +184,7 @@ namespace Blindr {
 		Gazer *gazer;
 		b2Body *ground;
 		Debris* headDebris;
+		Explosion* headExpl;
 		float scrollMeters;
 		
 		DebugDraw dbgDraw;

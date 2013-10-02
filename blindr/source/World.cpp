@@ -14,6 +14,7 @@ sim(b2Vec2(0,40)),
 player(0),
 gazer(0),
 headDebris(0),
+headExpl(0),
 doDebugDraw(false),
 juggleHead(0),
 didHit(false) {
@@ -204,7 +205,17 @@ void Blindr::World::run() {
 			}
 			
 			player->draw();
-			gazer->draw();
+			gazer->drawRaw();
+			for (Explosion *p = headExpl; p; ) {
+				Explosion *expl = p;
+				p = p->next;
+				if (expl->draw()) {
+					if (headExpl == expl) { headExpl = headExpl->next; }
+					if (expl->next) { expl->next->prev = expl->prev; }
+					if (expl->prev) { expl->prev->next = expl->next; }
+					delete expl;
+				}
+			}
 			SpriteBatch::end();
 		
 			if (doDebugDraw) { sim.DrawDebugData(); }
@@ -317,14 +328,19 @@ void Blindr::World::handleGazerHit() {
 	if (!deb) { return; }
 		
 	
-	b2Vec2 pos = deb->getBody()->GetPosition();
+	vec2 pos = vec(deb->getBody()->GetPosition()) * PixelsPerMeter;
 	
 	if (headDebris == deb) { headDebris = deb->next; }
 	if (deb->next) { deb->next->prev = deb->prev; }
 	if (deb->prev) { deb->prev->next = deb->next; }
 	delete deb;
 	
+	Audio::playSample(assets->expl);
 	
+	Explosion *expl = new Explosion(pos);
+	expl->next = headExpl;
+	if (headExpl) { headExpl->prev = expl; }
+	headExpl = expl;
 	
 }
 

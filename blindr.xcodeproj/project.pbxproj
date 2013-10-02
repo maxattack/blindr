@@ -10,6 +10,7 @@
 		500BE27817FA4788008E7063 /* Blindr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500BE27617FA4788008E7063 /* Blindr.cpp */; };
 		500BE27F17FA5849008E7063 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500BE27D17FA5849008E7063 /* Player.cpp */; };
 		500BE28217FA5884008E7063 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500BE28017FA5884008E7063 /* World.cpp */; };
+		500E04A217FBE3DA00DD2578 /* Explosion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500E04A017FBE3DA00DD2578 /* Explosion.cpp */; };
 		504B9FEF17F9FD89004E4827 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504B9FEE17F9FD89004E4827 /* Cocoa.framework */; };
 		504B9FF917F9FD89004E4827 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 504B9FF717F9FD89004E4827 /* InfoPlist.strings */; };
 		504B9FFB17F9FD89004E4827 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504B9FFA17F9FD89004E4827 /* main.cpp */; };
@@ -145,6 +146,7 @@
 		500BE27717FA4788008E7063 /* Blindr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blindr.h; sourceTree = "<group>"; };
 		500BE27D17FA5849008E7063 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		500BE28017FA5884008E7063 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
+		500E04A017FBE3DA00DD2578 /* Explosion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Explosion.cpp; sourceTree = "<group>"; };
 		504B9FEB17F9FD89004E4827 /* blindr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blindr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504B9FEE17F9FD89004E4827 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		504B9FF117F9FD89004E4827 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -427,6 +429,7 @@
 				500BE27D17FA5849008E7063 /* Player.cpp */,
 				50ADF13017FA98D1005619B7 /* Debris.cpp */,
 				50ADF13717FA9C8E005619B7 /* Gazer.cpp */,
+				500E04A017FBE3DA00DD2578 /* Explosion.cpp */,
 				500BE28017FA5884008E7063 /* World.cpp */,
 				50ADF14D17FBB282005619B7 /* IntroCutscene.cpp */,
 				504B9FFA17F9FD89004E4827 /* main.cpp */,
@@ -788,6 +791,7 @@
 				504BA07117FA0289004E4827 /* Shader.cpp in Sources */,
 				500BE27817FA4788008E7063 /* Blindr.cpp in Sources */,
 				505FCF8817FA364400477C47 /* b2Draw.cpp in Sources */,
+				500E04A217FBE3DA00DD2578 /* Explosion.cpp in Sources */,
 				500BE27F17FA5849008E7063 /* Player.cpp in Sources */,
 				505FCF9617FA364400477C47 /* b2Contact.cpp in Sources */,
 				505FCFA317FA364400477C47 /* b2RevoluteJoint.cpp in Sources */,

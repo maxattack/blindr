@@ -75,7 +75,7 @@ void Blindr::World::introCutscene() {
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
 			player->drawIdle();
-			gazer->draw(easeOut4(u));
+			gazer->drawRaw(easeOut4(u));
 			SpriteBatch::end();
 		}
 		introYield();
@@ -100,7 +100,7 @@ void Blindr::World::introCutscene() {
 			
 			SpriteBatch::draw(assets->bomb, vec(cp.x, y));
 			
-			gazer->draw();
+			gazer->drawRaw();
 			SpriteBatch::end();
 		}
 		introYield();
@@ -118,7 +118,7 @@ void Blindr::World::introCutscene() {
 			SpriteBatch::begin(assets->Sprites);
 			player->drawIdle();
 			
-			gazer->draw();
+			gazer->drawRaw();
 			vec2 p0 = cp - vec(0, 10);
 			
 			SpriteBatch::draw(assets->bomb, p0 + u * (p1 - p0) - vec(0, 50 * parabola(u)));
@@ -137,7 +137,7 @@ void Blindr::World::introCutscene() {
 			SpriteBatch::begin(assets->Sprites);
 			player->drawIdle();
 			
-			gazer->draw(1 - parabola(u));
+			gazer->drawRaw(1 - parabola(u));
 			
 			int eyelidFrame = int(u * 3) % 2;
 			SpriteBatch::draw(assets->gazer_eyelid, gp, eyelidFrame);
@@ -157,7 +157,7 @@ void Blindr::World::introCutscene() {
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 			SpriteBatch::begin(assets->Sprites);
 			player->drawIdle();
-			gazer->draw();
+			gazer->drawRaw();
 			SpriteBatch::end();
 		}
 		introYield();

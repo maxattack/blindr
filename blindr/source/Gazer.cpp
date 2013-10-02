@@ -11,7 +11,7 @@ Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
 	body = world->getSim()->CreateBody(&bodyParams);
 	
 	b2CircleShape shapeParams;
-	shapeParams.m_radius = 0.5f;
+	shapeParams.m_radius = 0.4f;
 	
 	b2FixtureDef fixParams;
 	fixParams.isSensor = true;
@@ -41,7 +41,7 @@ void Blindr::Gazer::postTick() {
 }
 
 		
-void Blindr::Gazer::draw(float spotAmount) {
+void Blindr::Gazer::drawRaw(float spotAmount) {
 	vec2 pp = PixelsPerMeter * vec(body->GetPosition());
 	SpriteBatch::draw(assets->gazer_body, pp);
 	SpriteBatch::end();
