@@ -11,11 +11,12 @@ Blindr::Gazer::Gazer(World *world) : irisOffset(vec(0,0)) {
 	body = world->getSim()->CreateBody(&bodyParams);
 	
 	b2CircleShape shapeParams;
-	shapeParams.m_radius = 1;
+	shapeParams.m_radius = 0.5f;
 	
 	b2FixtureDef fixParams;
 	fixParams.isSensor = true;
 	fixParams.shape = &shapeParams;
+	fixParams.filter.categoryBits = ctGazer;
 	body->CreateFixture(&fixParams);
 	
 	b2Vec2 toPlayer = world->getPlayer()->getBody()->GetPosition() - body->GetPosition();
@@ -90,4 +91,19 @@ void Blindr::Gazer::fillShadow() {
 	VectorGraphics::fillScreen(rgba(0.01f, 0.01f, 0.1f, 0.6f));
 }
 
+Blindr::Debris* Blindr::Gazer::findCollidingDebris() {
+	b2ContactEdge *edge = body->GetContactList();
+	while(edge) {
+		if (edge->other->GetUserData()) {
+			BodyUserdata *buddy = (BodyUserdata*) edge->other->GetUserData();
+			if (buddy->isDebris()) {
+				return (Debris*) buddy;
+			}
+		}
+		
+		
+		edge = edge->next;
+	}
 
+	return 0;
+}

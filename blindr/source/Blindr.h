@@ -45,19 +45,15 @@ namespace Blindr {
 		btDebris
 	};
 	
-	class BodyUserdata {
+	struct BodyUserdata {
 		BodyUserDataType userType;
-	public:
+
 		BodyUserdata(BodyUserDataType aType) : userType(aType) {}
 		
 		bool isPlayer() const { return userType == btPlayer; }
 		bool isDebris() const { return userType == btDebris; }
 	};
 	
-	
-	struct Pooled {
-		ID id;
-	};
 	
 	struct FloorData {
 		int tx, ty, tw;
@@ -114,29 +110,35 @@ namespace Blindr {
 
 	};
 	
-	class Debris : public BodyUserdata, public Pooled {
+	class Debris : public BodyUserdata {
 		b2Body *body;
 		b2Vec2 juggleNormal;
 		float lastJuggleTime;
 		int juggleCount;
+		bool inJuggleList;
 		
 	public:
-		Debris();
-		Debris& init();
-		Debris& release();
+		Debris(World *world);
+		~Debris();
 		
 		bool shouldCull();
-		
+		b2Body* getBody() { return body; }
 		
 		void draw();
+		bool hasBeenJuggled() const { return juggleCount > 0; }
 		
 		// juggles are buffered in the contact listener...
 		bool didGetJuggled(b2Vec2 normal);
 		// ...and then applied after the physics
 		void applyJuggle();
 		
+		Debris *juggleNext;
 		Debris *next;
+		Debris *prev;
 	};
+	
+	
+	
 	
 	class Gazer {
 		b2Body *body;
@@ -153,15 +155,20 @@ namespace Blindr {
 		void draw(float spotAmount=1.0f);
 		void drawIntro(float introAmount);
 		
+		Debris* findCollidingDebris();
+		
 		void fillShadow();
 	};
+
+
+
 
 	class World : public b2ContactListener {
 		b2World sim;
 		Player *player;
 		Gazer *gazer;
 		b2Body *ground;
-		Pool<Debris, 64> debris;
+		Debris* headDebris;
 		float scrollMeters;
 		
 		DebugDraw dbgDraw;
@@ -173,6 +180,7 @@ namespace Blindr {
 		
 	public:
 		World();
+		~World();
 
 		b2World* getSim() { return &sim; }
 		b2Vec2 screenSize() { return bvec(Graphics::canvasSize() * MetersPerPixel); }
@@ -194,6 +202,7 @@ namespace Blindr {
 		
 		void handleEvents();
 		void handleContacts();
+		void handleGazerHit();
 		void createWalls();
 		void createFloor(b2Vec2 p0, b2Vec2 p1);
 		

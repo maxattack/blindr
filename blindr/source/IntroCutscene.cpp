@@ -35,7 +35,7 @@ void Blindr::World::titleScene() {
 		SpriteBatch::end();
 		}
 		
-		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Mechanic: Juggling\nCode: xeW // Art: Blob // Music: Derris-Kharlan", vec(0.5f, 0.8f) * Graphics::canvasSize());
+		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Element: Juggler\nCode: xeW // Art: Blob // Music: Derris-Kharlan", vec(0.5f, 0.8f) * Graphics::canvasSize());
 		
 	} while(!introYield());
 	

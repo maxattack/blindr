@@ -13,6 +13,7 @@ Blindr::World::World() :
 sim(b2Vec2(0,40)),
 player(0),
 gazer(0),
+headDebris(0),
 doDebugDraw(false),
 juggleHead(0),
 didHit(false) {
@@ -151,8 +152,8 @@ void Blindr::World::run() {
 	// hack: init the iris
 	gazer->postTick();
 	
-	titleScene();
-	introCutscene();
+	//titleScene();
+	//introCutscene();
 	
 	for(;;) {
 		handleEvents();
@@ -164,14 +165,16 @@ void Blindr::World::run() {
 		timeToNextSpawn -= Time::deltaSeconds();
 		if (timeToNextSpawn < 0.0f) {
 			timeToNextSpawn += expovariate(TimeBetweenSpawns);
-			if (!debris.isFull()) {
-				debris.alloc().init();
-			}
+			Debris *deb = new Debris(this);
+			deb->next = headDebris;
+			if (headDebris) { headDebris->prev = deb; }
+			headDebris = deb;
 		}
 		player->preTick();
 		gazer->preTick();
 		sim.Step(Time::deltaSeconds(), 8, 8);
 		handleContacts();
+		handleGazerHit();
 		player->postTick();
 		gazer->postTick();
 		
@@ -187,13 +190,16 @@ void Blindr::World::run() {
 			Graphics::ScopedTransform push( translationMatrix(vec(0, -scrollMeters * PixelsPerMeter)) );
 		
 			SpriteBatch::begin(assets->Sprites);
-			
-			for(Debris*p=debris.begin(); p!=debris.end();) {
-				if (p->shouldCull()) {
-					debris.dealloc(p->release());
+			for(Debris *p = headDebris; p; ) {
+				Debris *deb = p;
+				p = p->next;
+				if (deb->shouldCull()) {
+					if (headDebris == deb) { headDebris = deb->next; }
+					if (deb->next) { deb->next->prev = deb->prev; }
+					if (deb->prev) { deb->prev->next = deb->next; }
+					delete deb;
 				} else {
-					p->draw();
-					++p;
+					deb->draw();
 				}
 			}
 			
@@ -203,10 +209,6 @@ void Blindr::World::run() {
 		
 			if (doDebugDraw) { sim.DrawDebugData(); }
 		}
-					
-//		std::stringstream msg;
-//		msg << "Y = " << int(scrollMeters) << "m";
-//		SpriteBatch::drawLabel(assets->flixel, msg.str().c_str(), vec(0,0));
 		
 		SDL_GL_SwapWindow(Graphics::window());
 	}
@@ -286,10 +288,10 @@ void Blindr::World::checkForJuggle(b2Fixture *fixture, b2Contact *contact) {
 	}
 	// threshold for a juggle is "at least a little uppish"
 	if (normal.y < -0.1f) {
-		Debris *debris = (Debris*) fixture->GetBody()->GetUserData();
-		if (debris->didGetJuggled(normal)) {
-			debris->next = juggleHead;
-			juggleHead = debris;
+		Debris *deb = (Debris*) fixture->GetBody()->GetUserData();
+		if (deb->didGetJuggled(normal)) {
+			deb->juggleNext = juggleHead;
+			juggleHead = deb;
 		}
 	} else {
 		didHit = true;
@@ -303,12 +305,35 @@ void Blindr::World::handleContacts() {
 	} else if (didHit) {
 		Audio::playSample(assets->hit);
 	}
-	for(Debris *d=juggleHead; d; d=d->next) {
+	for(Debris *d=juggleHead; d; d=d->juggleNext) {
 		d->applyJuggle();
 	}
 	juggleHead = 0;
 	didHit = false;
 }
 
+void Blindr::World::handleGazerHit() {
+	Debris *deb = gazer->findCollidingDebris();
+	if (!deb) { return; }
+		
+	
+	b2Vec2 pos = deb->getBody()->GetPosition();
+	
+	if (headDebris == deb) { headDebris = deb->next; }
+	if (deb->next) { deb->next->prev = deb->prev; }
+	if (deb->prev) { deb->prev->next = deb->next; }
+	delete deb;
+	
+	
+	
+}
 
-
+Blindr::World::~World() {
+	for(Debris* p=headDebris; p; ) {
+		Debris *deb = p;
+		p = p->next;
+		delete deb;
+	}
+	delete gazer;
+	delete player;
+}
