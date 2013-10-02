@@ -2,7 +2,7 @@
 import tmx
 from lputil import *
 
-FLOOR_TILES = [0,1,10]
+FLOOR_TILES = [0,1,4,10]
 BOX_TILES = []#10]
 
 def main():
