@@ -14,7 +14,7 @@ int main(int argc, char ** argv)
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { return -1; }
 	
 	Time::init();
-	Graphics::init(4, 426, 240);
+	Graphics::init(3, 426, 240);
 	SpriteBatch::init();
 	VectorGraphics::init();
 	Audio::init();

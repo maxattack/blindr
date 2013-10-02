@@ -49,7 +49,7 @@ void Blindr::World::titleScene() {
 		SpriteBatch::draw(assets->title, 0.5f * Graphics::canvasSize());
 		SpriteBatch::end();
 		
-		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Element: Juggler\nCode: xeW // Art: Blob // Music: Derris-Kharlan", vec(0.5f, 0.8f) * Graphics::canvasSize());
+		SpriteBatch::drawLabelCentered(assets->flixel, "Press Space to Begin\n\nTheme: Blindness // Element: Juggler\nCode: xeW // Art: Blob // Music: Derris-Kharlan\nThis game was developed as part of Indie Speed Run 2013 (indiespeedrun.com)", vec(0.5f, 0.77f) * Graphics::canvasSize());
 		
 	} while(!cutsceneYield());
 	
